@@ -1,0 +1,139 @@
+<html>
+    <head>
+        <title>Order IT</title>
+        <link rel="stylesheet" href="style.css">
+        <script src = "main.js" defer></script>
+    </head>
+    <body>
+        <div class = "header">
+            <h1 class = "header__title">Govind Caters</h1>
+        </div>
+        <div class = "content">
+            <div class = "search-bar">
+                <input type="search" placeholder="What's Your Mood..." class = "search-bar__text" id = "search">
+            </div>
+            <div class = "item">
+                <div class = "item__type">
+                    <h1 class = "item__type__title">Snacks</h1>
+                </div>
+                <div id = "snacks" class = "item__wrapper">
+                    <!-- <div class = "item__dish">
+                        <img src="../Images/burger.png" class = "item__dish__image">
+                        <h1 class = "item__dish__name">Burger <img src="../Images/vegLabel.png" class = "item__dish__label"></h1>
+                        <div class = "item__dish__footer">
+                            <h1 class = "item__dish__rate">₹ 40</h1>
+                            <div class = "add-to-cart__items">
+                                <button>+</button> <h1 class = "add-to-cart__items__quantity"> 0 </h1><button>-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "item__dish">
+                        <img src="../Images/maggie.png" class = "item__dish__image">
+                        <h1 class = "item__dish__name">Maggie <img src="../Images/vegLabel.png" class = "item__dish__label"></h1>
+                        <div class = "item__dish__footer">
+                            <h1 class = "item__dish__rate">₹ 40</h1>
+                            <div class = "add-to-cart__items">
+                                <button>+</button> <h1 class = "add-to-cart__items__quantity"> 0 </h1><button>-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "item__dish">
+                        <img src="../Images/sandwich.png" class = "item__dish__image">
+                        <h1 class = "item__dish__name">Sandwich <img src="../Images/vegLabel.png" class = "item__dish__label"></h1>
+                        <div class = "item__dish__footer">
+                            <h1 class = "item__dish__rate">₹ 40</h1>
+                            <div class = "add-to-cart__items">
+                                <button>+</button> <h1 class = "add-to-cart__items__quantity"> 0 </h1><button>-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "item__dish">
+                        <img src="../Images/sandwich.png" class = "item__dish__image">
+                        <h1 class = "item__dish__name">Sandwich <img src="../Images/vegLabel.png" class = "item__dish__label"></h1>
+                        <div class = "item__dish__footer">
+                            <h1 class = "item__dish__rate">₹ 40</h1>
+                            <div class = "add-to-cart__items">
+                                <button>+</button> <h1 class = "add-to-cart__items__quantity"> 0 </h1><button>-</button>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class = "item__type">
+                    <h1 class = "item__type__title">Main Course</h1>
+                </div>
+                <div id = "main-course" class = "item__wrapper">
+                    <div class = "item__dish">
+                        <img src="../Images/burger.png" class = "item__dish__image">
+                        <h1 class = "item__dish__name">Burger <img src="../Images/vegLabel.png" class = "item__dish__label"></h1>
+                        <div class = "item__dish__footer">
+                            <h1 class = "item__dish__rate">₹ 40</h1>
+                            <div class = "add-to-cart__items">
+                                <button>+</button> <h1 class = "add-to-cart__items__quantity"> 0 </h1><button>-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "item__dish">
+                        <img src="../Images/maggie.png" class = "item__dish__image">
+                        <h1 class = "item__dish__name">Maggie <img src="../Images/vegLabel.png" class = "item__dish__label"></h1>
+                        <div class = "item__dish__footer">
+                            <h1 class = "item__dish__rate">₹ 40</h1>
+                            <div class = "add-to-cart__items">
+                                <button>+</button> <h1 class = "add-to-cart__items__quantity"> 0 </h1><button>-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "item__dish">
+                        <img src="../Images/sandwich.png" class = "item__dish__image">
+                        <h1 class = "item__dish__name">Sandwich <img src="../Images/vegLabel.png" class = "item__dish__label"></h1>
+                        <div class = "item__dish__footer">
+                            <h1 class = "item__dish__rate">₹ 40</h1>
+                            <div class = "add-to-cart__items">
+                                <button>+</button> <h1 class = "add-to-cart__items__quantity"> 0 </h1><button>-</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "item__dish">
+                        <img src="../Images/sandwich.png" class = "item__dish__image">
+                        <h1 class = "item__dish__name">Sandwich <img src="../Images/vegLabel.png" class = "item__dish__label"></h1>
+                        <div class = "item__dish__footer">
+                            <h1 class = "item__dish__rate">₹ 40</h1>
+                            <div class = "add-to-cart__items">
+                                <button>+</button> <h1 class = "add-to-cart__items__quantity"> 0 </h1><button>-</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class = "add-to-cart">
+                <button class = "order_btn"><img src = "../Images/cart.png"></button>
+            </div>
+        </div>
+        <div class = "checkout-overlay" id = "checkout-overlay">
+            <div class = "checkout-container">
+                <button class = "checkout-close">
+                    ✕
+                </button>
+                <h2>Your Order</h2>
+
+                <div id = "checkout-items">
+                </div>
+                <div class = "checkout-total">
+                    ₹0
+                </div>
+
+                <button class = "pay-btn">
+                    Pay Now
+                </button>
+            </div>
+        </div>
+        
+        
+
+        <div class = "footer">
+            <h1 class = "made_with">By Hall 3 Canteen (Govind Caters) </h1>
+        </div>
+
+        
+    </body>
+</html>
