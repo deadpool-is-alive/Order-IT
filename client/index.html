@@ -20,7 +20,7 @@
         
         <div class = "content">
             <div class = "search-bar">
-                <svg class="searc-bar__icon" viewBox="0 0 24 24" fill = "none"
+                <svg class="search-bar__icon" viewBox="0 0 24 24" fill = "none"
                      stroke = "currentColor" stroke-width="2" stroke-linecap="round"
                      stroke-linejoin="round" aria-hidden="true">
                      <circle cx="11" cy="11" r="8"/>
@@ -48,35 +48,56 @@
                 
                 
             </div>
+
+
             <div class = "add-to-cart">
-                <button class = "order_btn"><img src = "./public/images/cart.png"></button>
-            </div>
-        </div>
-        <div class = "checkout-overlay" id = "checkout-overlay">
-            <div class = "checkout-container">
-                <button class = "checkout-close">
-                    ✕
-                </button>
-                <h2>Your Order</h2>
-
-                <div id = "checkout-items">
-                </div>
-                <div class = "checkout-total">
-                    ₹0
-                </div>
-
-                <button class = "pay-btn">
-                    Pay Now
+                <button class = "order_btn" aria-label="View cart">
+                    <img src = "./public/images/cart.png" alt="Cart">
+                    <span class="order_btn_badge" id="cart-badge" aria-live="polite"></span>
                 </button>
             </div>
         </div>
-        
-        
 
-        <div class = "footer">
-            <h1 class = "made_with">By Hall 3 Canteen (Govind Caters) </h1>
+
+        <div class = "checkout-overlay" id = "checkout-overlay" role="dialog" aria-modal="true" aria-label="Your order">
+            <div class="checkout-container">
+                <div class = "checkout-header">
+                    <h2>Your Order</h2>
+                    <button class="checkout-close" aria-label="Close cart">✕</button>
+                </div>
+                
+                <div id = "checkout-items"> </div>
+
+                <div class = "checkout-footer">
+                    <div class = "checkout-total-row">
+                        <span class = "checkout-total-label">Total</span>
+                        <span class = "checkout-total" id="checkout-total-amount">₹0</span>
+                    </div>
+                    <button class="order-now-btn">Order Now</button>
+                </div>
+            </div>
         </div>
+        
+        <div class = "order-now-form">
+            <form>
+                <label for="fname">Full name:</label><br>
+                <input type="text" id="fname"><br>
+                <label for ="phone">Phone Number:</label><br>
+                <input type="text" id="phone"><br>
+                <label for="address">Your Room Number</label><br>
+                <input type="text" id="address"><br>
+                <input type = "checkbox" id="room_delivery" name="room_delivery" value="False">
+                <label for="room_delivery">Deliver to room </label><br>
+                <input type="submit" value="Submit">
+            </form>
+        </div>
+        
 
+        <footer class = "footer">
+            <span class = "footer__brand">Hall 3 Canteen</span>
+            <div class="footer__divider" aria-hidden="true"></div>
+            <p class="made_with">By Govind Caters</p>
+        </footer>
         
     </body>
 </html>
