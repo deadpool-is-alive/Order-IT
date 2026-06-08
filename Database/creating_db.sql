@@ -24,3 +24,4 @@
 -- DROP TABLE menu_items; 
 
 
+SELECT * FROM menu_items
