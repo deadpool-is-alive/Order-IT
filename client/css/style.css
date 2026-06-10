@@ -92,6 +92,7 @@ html{
     scroll-behavior: smooth;
 
     scrollbar-gutter: stable;
+    overflow-y: scroll;
 }
 
 body{
@@ -124,6 +125,24 @@ body * {
     box-shadow: 0 2px 16px var(--clr-shadow-lg);
 }
 
+.header__head{
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.header__logo{
+    width: clamp(50px, 8vw, 90px);
+    height: clamp(50px, 8vw, 90px);
+    flex-shrink: 0;
+}
+
+.header__logo img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
 
 .header__brand{
     display: flex;
@@ -708,12 +727,40 @@ body * {
     transform: scale(0.98);
 }
 
-.order-now-form {
-    display: None;
+.order-now-form{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 15px;
 }
 
-.order-now-form.active{
+.order-now-form input{
+    padding: 10px;
+
+    border: 1px solid #ddd;
+    
+    border-radius: 8px;
+
+    font-size: 14px;
+}
+
+.delivery-option{
     display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-error{
+    color: red;
+    font-size: 0.85rem;
+}
+
+.order-now-btn:disabled{
+    opacity: 0.5;
+
+    cursor: not-allowed;
 }
 
 /* ======================

@@ -26,7 +26,7 @@ CREATE TABLE orders (
         'Delivered'
 	) DEFAULT 'Pending',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );
+);
     
 CREATE TABLE order_items (
 	id INT AUTO_INCREMENT PRIMARY KEY,
@@ -41,5 +41,18 @@ CREATE TABLE order_items (
         
 	FOREIGN KEY (product_id)
 		REFERENCES products(id)
-	);
-    
+);
+
+USE orderit;
+ALTER TABLE orders 
+ADD delivery BOOLEAN DEFAULT FALSE;
+
+ALTER TABLE products
+ADD packaging_cost DECIMAL(10,2) DEFAULT 0.00;
+
+ALTER TABLE order_items
+ADD packaging_cost DECIMAL(10,2) DEFAULT 0.00;
+
+SELECT * FROM order_items;
+SELECT * FROM orders;
+SELECT * FROM products;

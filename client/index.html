@@ -4,14 +4,21 @@
         <meta name = "viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/style.css">
-        <script src = "main.js" defer></script>
+        <script type="module" src = "./js/main.js"></script>
+        <link rel="icon" type="image/x-icon" href="./public/images/logo.png">
     </head>
     <body>
         <header class = "header">
-          <div class = "header__brand">
-            <h1 class = "header__title">Hall 3 Canteen</h1>
-            <span class = "header__subtitle">By Govind Caters</span>
-          </div>
+            <div class = "header__head">
+                <div class="header__logo">
+                    <img src = "./public/images/logo.png" alt="Hall 3 Logo">
+                </div>
+                <div class = "header__brand">
+                <h1 class = "header__title">Hall 3 Canteen</h1>
+                <span class = "header__subtitle">By Govind Caters</span>
+                </div>
+            </div>
+          
           <button class = "header__status" id = "shop-status-btn" data-open="true" aria-label="Toggle shop status">
             <span class = "header__status__dot" aria-hidden="true"></span>
             <span class = "header__status_label" id = "shop-status-label">Open</span>
@@ -65,7 +72,9 @@
                     <h2>Your Order</h2>
                     <button class="checkout-close" aria-label="Close cart">✕</button>
                 </div>
-                
+
+                <div class = "order-now-form"></div>
+
                 <div id = "checkout-items"> </div>
 
                 <div class = "checkout-footer">
@@ -78,19 +87,7 @@
             </div>
         </div>
         
-        <div class = "order-now-form">
-            <form>
-                <label for="fname">Full name:</label><br>
-                <input type="text" id="fname"><br>
-                <label for ="phone">Phone Number:</label><br>
-                <input type="text" id="phone"><br>
-                <label for="address">Your Room Number</label><br>
-                <input type="text" id="address"><br>
-                <input type = "checkbox" id="room_delivery" name="room_delivery" value="False">
-                <label for="room_delivery">Deliver to room </label><br>
-                <input type="submit" value="Submit">
-            </form>
-        </div>
+        
         
 
         <footer class = "footer">
