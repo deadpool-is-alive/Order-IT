@@ -1,3 +1,6 @@
 export const CONFIG = {
-    API_URL: "http://172.23.17.122:5000"
+    API_URL:
+        window.location.hostname === "localhost"
+            ? "http://localhost:5000"
+            : "https://orderit-production.up.railway.app"
 };

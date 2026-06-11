@@ -1,4 +1,4 @@
-USE orderit;
+-- USE orderit;
 INSERT INTO products
 (name, description, price, image_url, category, is_veg, available, packaging_cost)
 VALUES

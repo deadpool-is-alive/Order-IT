@@ -11,3 +11,4 @@ VALUES(
     '$2a$12$zlVbW8ZhCQP2OnhJAPT.deDsG3xMmdnkH4.IhQxEcanJt6GiJk2je'
 );
 
+SELECT * FROM admins;
