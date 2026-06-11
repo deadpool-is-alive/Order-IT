@@ -1,7 +1,13 @@
-import {getCart, getFinalBill, getTotalBill} from "../cart/cartStore.js";
+import {getCart, getFinalBill, getPackagingTotal, getTotalBill} from "../cart/cartStore.js";
 import {CONFIG} from "../config.js";
 
 let roomDelivery=0;
+
+function updateCheckoutTotals(){
+    document.getElementById("food-total").textContent = `₹${getTotalBill()}`;
+    document.getElementById("packaging-total").textContent = roomDelivery ? `₹${getPackagingTotal()}` : "₹0";
+    document.getElementById("checkout-total-amount").textContent = `₹${getFinalBill(roomDelivery)}`;
+}
 
 function renderCheckout(){
     const container = document.querySelector("#checkout-items");
@@ -43,7 +49,7 @@ function renderCheckout(){
             `;
     }
 
-    document.querySelector(".checkout-total").textContent = `₹${getFinalBill(roomDelivery)}`;
+    updateCheckoutTotals();
 }
 
 function openCheckout(overlay){
@@ -61,6 +67,8 @@ function showForm(form){
         <form id = "customer-form">
             <label>Full name</label><br>
             <input type="text" id="fname" required><br>
+            <label>Roll Number</label><br>
+            <input type="text" id="rollNumber" required><br>
             <label >Phone Number:</label><br>
             <input type="text" id="phone" maxlength="10" required><br>
             <div class="delivery-option">
@@ -96,6 +104,8 @@ function setUpFormValidation(){
         else{
             roomDelivery = 0;
         }
+        updateCheckoutTotals();
+
 
         if(!checkbox.checked){
             roomInput.value = "";
@@ -159,10 +169,11 @@ async function orderNow(){
 
     const orderData = {
         customer_name: document.getElementById("fname").value,
+        customer_rollnum: document.getElementById("rollNumber").value,
         customer_phone: document.getElementById("phone").value,
         customer_address: document.getElementById("address").value,
         delivery: document.getElementById("room_delivery").checked,
-        total_price: getTotalBill(),
+        total_price: getFinalBill(roomDelivery),
         cart: getCart()
     };
 
@@ -187,7 +198,7 @@ async function orderNow(){
 
         alert(`Order Placed! ID ${data.orderId}`);
     }
-    catch{
+    catch(err){
         console.error(err);
 
         alert("Failed to placer order");

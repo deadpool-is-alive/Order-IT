@@ -34,20 +34,23 @@ export function getCart(){
     return cart;
 }
 
-export function getTotalBill(){
+export function getTotalBill(){ 
     return totalBill;
 }
 
-export function getFinalBill(roomDelivery){
+export function getPackagingTotal(){
     let total = 0;
 
     for(const item of Object.values(cart)){
-        total += item.quantity *  item.price;
-
-        if(roomDelivery == 1){
-            total += item.quantity * item.packaging_cost;
-        }
+        //console.log(typeof item.quantity);
+        //console.log(typeof item.packaging_cost);
+        total += item.quantity * item.packaging_cost;
     }
 
     return total;
+}
+
+export function getFinalBill(roomDelivery){
+    //console.log("Getting the bill");
+    return getTotalBill() + Math.min((roomDelivery ? getPackagingTotal() : 0),50);
 }

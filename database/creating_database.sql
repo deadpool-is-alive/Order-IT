@@ -56,3 +56,17 @@ ADD packaging_cost DECIMAL(10,2) DEFAULT 0.00;
 SELECT * FROM order_items;
 SELECT * FROM orders;
 SELECT * FROM products;
+
+ALTER TABLE orders
+MODIFY COLUMN status ENUM(
+    'Pending',
+    'Preparing',
+    'Ready',
+    'Delivered',
+    'Cancelled'
+) DEFAULT 'Pending';
+
+DESCRIBE orders;
+
+ALTER TABLE orders 
+ADD customer_rollnum VARCHAR(15);

@@ -6,6 +6,7 @@ const db = require("../db/db");
 router.post("/",(req,res)=>{
     const {
         customer_name,
+        customer_rollnum,
         customer_phone,
         customer_address,
         delivery,
@@ -17,6 +18,7 @@ router.post("/",(req,res)=>{
         INSERT INTO orders
         (
             customer_name,
+            customer_rollnum,
             customer_phone,
             customer_address,
             total_price,
@@ -24,12 +26,13 @@ router.post("/",(req,res)=>{
             status
         )
         VALUES
-        (?, ?, ?, ?, ?, 'Pending')
+        (?, ?, ?, ?, ?, ?, 'Pending')
     `;
 
     db.query(orderSql, 
             [
                 customer_name,
+                customer_rollnum,
                 customer_phone,
                 customer_address,
                 total_price,
@@ -48,24 +51,7 @@ router.post("/",(req,res)=>{
                 for(const [productID,item] of Object.entries(cart)){
                     itemPromises.push(
                         new Promise( (resolve, reject) =>{
-                            
-                            const productSql = `
-                                SELECT 
-                                    packaging_cost
-                                FROM products
-                                WHERE id = ?
-                                `;
-                            
-                            db.query(productSql,[productID], (err,rows) =>{
-
-                                if(err){
-                                    reject(err);
-                                    return;
-                                }
-
-                                const product = rows[0];
-
-                                const itemSql = `
+                            const itemSql = `
                                 INSERT INTO order_items
                                 (
                                     order_id,
@@ -77,13 +63,12 @@ router.post("/",(req,res)=>{
                                 VALUES
                                 (?, ?, ?, ?, ?)
                                 `;
-
-                                db.query(itemSql, [
+                            db.query(itemSql, [
                                         orderId,
                                         productID,
                                         item.quantity,
                                         item.price,
-                                        product.packaging_cost
+                                        item.packaging_cost
 
                                 ], (err) => {
                                     if(err){
@@ -94,7 +79,54 @@ router.post("/",(req,res)=>{
                                     resolve();
                                 }
                                 );
-                            });
+
+                            
+                            // const productSql = `
+                            //     SELECT 
+                            //         packaging_cost
+                            //     FROM products
+                            //     WHERE id = ?
+                            //     `;
+                            
+                            // db.query(productSql,[productID], (err,rows) =>{
+
+                            //     if(err){
+                            //         reject(err);
+                            //         return;
+                            //     }
+
+                            //     const product = rows[0];
+
+                            //     const itemSql = `
+                            //     INSERT INTO order_items
+                            //     (
+                            //         order_id,
+                            //         product_id,
+                            //         quantity,
+                            //         price,
+                            //         packaging_cost
+                            //     )
+                            //     VALUES
+                            //     (?, ?, ?, ?, ?)
+                            //     `;
+
+                            //     db.query(itemSql, [
+                            //             orderId,
+                            //             productID,
+                            //             item.quantity,
+                            //             item.price,
+                            //             item.packaging_cost
+
+                            //     ], (err) => {
+                            //         if(err){
+                            //             reject(err);
+                            //             return;
+                            //         }
+
+                            //         resolve();
+                            //     }
+                            //     );
+                            // });
                         })
                     );
                 
@@ -125,6 +157,27 @@ router.get("/",verifyToken, (req,res) =>{
             }
 
             res.json(result);
+        }
+    );
+});
+
+router.get("/:id/items", verifyToken, (req, res) => {
+    db.query(
+        `
+        SELECT oi.*, p.name
+        FROM order_items oi
+        JOIN products p
+            ON p.id = oi.product_id
+        WHERE oi.order_id = ?
+        `,
+        [req.params.id],
+        (err, rows) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).json({ error: "Database error" });
+            }
+
+            res.json(rows);
         }
     );
 });

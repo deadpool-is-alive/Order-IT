@@ -75,7 +75,8 @@ router.put("/:id", verifyToken, (req,res) =>{
         name,
         description,
         price,
-        category
+        category,
+        available
     } = req.body;
 
     const sql = `
@@ -84,12 +85,13 @@ router.put("/:id", verifyToken, (req,res) =>{
         name=?,
         description=?,
         price=?,
-        category=?
+        category=?,
+        available=?
     WHERE id=?`;
 
     db.query(
         sql,
-        [name, description, price, category, id],
+        [name, description, price, category, available, id],
         (err,result) =>{
             if(err){
                 return res.status(500).json(err);

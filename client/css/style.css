@@ -840,6 +840,14 @@ body * {
     margin: 0.3rem 0;
 }
 
+.contact {
+    color: var(--clr-charcoal-lt);
+}
+
+.phone-link{
+    color: var(--clr-amber);
+}
+
 /* ==========
     RESPONSIVE TABLET
     =========

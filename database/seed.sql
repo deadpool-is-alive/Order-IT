@@ -1,17 +1,5 @@
 USE orderit;
 INSERT INTO products
-(name,description,price,category,is_veg)
-
-VALUES
-
-('Burger','Cheese Burger',120,'Fast Food',FALSE),
-
-('Pizza','Margherita Pizza',250,'Fast Food',TRUE),
-
-('Maggie','Masala Maggie',80,'Snacks',TRUE);
-
-USE orderit;
-INSERT INTO products
 (name, description, price, image_url, category, is_veg, available, packaging_cost)
 VALUES
 ('Tea', 'Hot milk tea', 10, 'Tea.jpg', 'Beverages', TRUE, TRUE, 5),
