@@ -195,10 +195,14 @@ async function loadOrders(manual = false){
 
         const data = await res.json();
         allOrders = data;
+        //console.log(allOrders);
         updateStats();
+        //console.log("Updated stats");
         renderOrders();
+        //console.log("Rendered");
         updateBadge();
     } catch(err){
+        //console.log(err);
         showToast('Failed to load orders.', 'error');
     } finally{
         if(manual){
@@ -212,8 +216,11 @@ async function loadOrders(manual = false){
 function filterOrdersByTab(tab){
     switch(tab){
         case 'new':     return allOrders.filter(o => o.status === 'Pending');
-        case 'ongoing': return allOrders.filter(o => o.status === 'Preparing' || o.status === 'Ready');
-        case 'past':    return allOrders.filter(o => o.status === 'Delivered');
+        case 'preparing': return allOrders.filter(o => o.status === 'Preparing');
+        case 'ready' : return allOrders.filter(o => o.status === 'Ready');
+        case 'paid':    return allOrders.filter(o => o.status === 'Paid');
+        case 'credit' : return allOrders.filter(o => o.status === 'Credit');
+        case 'cancelled' : return allOrders.filter(o => o.status === 'Cancelled');
         default:        return allOrders;
     }
 }
@@ -222,7 +229,9 @@ function updateStats(){
     document.getElementById('statNew').textContent       = allOrders.filter(o => o.status === 'Pending').length;
     document.getElementById('statPreparing').textContent = allOrders.filter(o => o.status === 'Preparing').length;
     document.getElementById('statReady').textContent     = allOrders.filter(o => o.status === 'Ready').length;
-    document.getElementById('statDelivered').textContent = allOrders.filter(o => o.status === 'Delivered').length;
+    document.getElementById('statPaid').textContent = allOrders.filter(o => o.status === 'Paid').length;
+    document.getElementById('statCredit').textContent = allOrders.filter(o => o.status === 'Credit').length;
+    document.getElementById('statCancelled').textContent = allOrders.filter(o => o.status === 'Cancelled').length;
 }
 
 function updateBadge(){
@@ -238,6 +247,7 @@ function updateBadge(){
 
 function renderOrders(){
     const orders = filterOrdersByTab(currentTab);
+    //console.log("Current tab = " + currentTab);
     ordersContainer.innerHTML = '';
 
     if(orders.length === 0){
@@ -266,8 +276,9 @@ function buildOrderCard(order){
         'Pending'  : 'pill-pending',
         'Preparing' : 'pill-preparing',
         'Ready' : 'pill-ready',
-        'Paid' : 'pill-delivered',
-        'Credit' : 'pill-credit'
+        'Paid' : 'pill-paid',
+        'Credit' : 'pill-credit',
+        'Cancelled' : 'pill-cancelled'
     }[order.status] || 'pill-pending';
 
     const timeStr = order.created_at ? new Date(order.created_at).toLocaleTimeString('en-IN',  { hour: '2-digit', minute: '2-digit' }) : '-';
@@ -278,7 +289,7 @@ function buildOrderCard(order){
             <span class="order-status-pill ${statusClass}">${order.status}</span>
         </div>
         <div>
-            <div class="order-customer">${esc(order.customer_name)}</div>
+            <div class="order-customer">${esc(order.customer_name)} | ${esc(order.customer_rollnum)}</div>
             <div class="order-phone">${esc(order.customer_phone || '-')}</div>
         </div>
         <div class="order-meta">
@@ -296,6 +307,8 @@ function buildOrderCard(order){
 async function openOrderModal(order){
     currentOrderId = order.id;
     document.getElementById('modalOrderTitle').textContent = `Order #${order.id}`;
+
+    
 
     const body = document.getElementById('modalBody');
     body.innerHTML = `
@@ -326,31 +339,36 @@ async function openOrderModal(order){
             <span>Total</span>
             <span>₹${parseFloat(order.total_price || 0).toFixed(2)}</span>
         </div>`;
+    
+        let items = [];
+
+    try{
+        const res = await fetch(`${API}/orders/${order.id}/items`, {
+            headers: {Authorization: `Bearer ${token}`}
+        });
+        items = await res.json();
+
+        renderOrderItems(items);
+    } catch(err){
+        console.log(err);
+        document.getElementById('orderItemsWrap').innerHTML = '<p>Failed to load items</p>';
+    }
 
     const actions = document.getElementById('statusActions');
-    const statuses = ['Pending', 'Preparing', 'Ready', 'Delivered'];
+    const statuses = ['Pending', 'Preparing', 'Ready', 'Paid', 'Credit', 'Cancelled'];
     actions.innerHTML='';
     statuses.forEach(s => {
         const btn = document.createElement('button');
         btn.className = `status-btn ${s.toLowerCase()}`;
         btn.textContent = s;
         if(order.status === s) btn.classList.add('active-status');
-        btn.addEventListener('click', () => updateOrderStatus(order.id, s, order.customer_phone));
+        btn.addEventListener('click', () => updateOrderStatus(order.id, s, order.customer_phone, items));
         actions.appendChild(btn);
     })
 
     orderModal.classList.remove('hidden');
 
-    try{
-        const res = await fetch(`${API}/orders/${order.id}/items`, {
-            headers: {Authorization: `Bearer ${token}`}
-        });
-        const items = await res.json();
-
-        renderOrderItems(items);
-    } catch(err){
-        document.getElementById('orderItemsWrap').innerHTML = '<p>Failed to load items</p>';
-    }
+    
 }
 
 function renderOrderItems(items){
@@ -360,11 +378,11 @@ function renderOrderItems(items){
         wrap.innerHTML = '<p>No items found </p>';
         return;
     }
-
+    //console.log(items);
     wrap.innerHTML = items.map(item => `
         <div class="order-items">
             <span>${esc(item.name)}</span>
-            <span>${item.quanity}<span>
+            <span>x${item.quantity} :<span>
             <span>₹${parseFloat(item.price).toFixed(2)}</span>
         </div>`).join('');
 }
@@ -377,7 +395,7 @@ function closeOrderModal(){
 
 // _________ UPDATE ORDER STATUS ____________
 
-async function updateOrderStatus(orderId, status, phone){
+async function updateOrderStatus(orderId, status, phone, items){
     try {
         const res = await fetch(`${API}/orders/${orderId}/status`,{
             method: 'PUT',
@@ -395,6 +413,7 @@ async function updateOrderStatus(orderId, status, phone){
 
         if(status === 'Ready' && phone){
             console.log("Sending Notification");
+            sendReadyNotification(phone, orderId, items);
         }
 
         closeOrderModal();
@@ -404,8 +423,26 @@ async function updateOrderStatus(orderId, status, phone){
     }
 }
 
-async function sendReadyNotification(phone, orderId){
+async function sendReadyNotification(phone, orderId, items){
 
+    const itemsText = items.map(item =>
+        `• ${item.name} x${item.quantity} - ₹${Number(item.price).toFixed(2)}`
+    ).join('\n');
+
+    const message =
+                    `Hall 3 Canteen\n Order #${orderId} is ready for pickup.\n\nItems:\n${itemsText}\n\nThank you!`;
+    // doing whatsapp
+
+    const cleanPhone = String(phone).replace(/\D/g, '');
+    const waPhone = cleanPhone.startsWith('91') ? cleanPhone : `91${cleanPhone}`;
+    console.log(message);
+    console.log(JSON.stringify(message));
+    const waMsg = encodeURIComponent(message);
+    const waUrl = `https://wa.me/${waPhone}?text=${waMsg}`;
+    //console.log(waUrl);
+    console.log(decodeURIComponent(waMsg));
+    showToast(`Order Ready! Opening WhatsApp...`, 'success');
+    setTimeout(() => window.open(waUrl, '_blank'), 800);
 }
 
 // _______ PRODUCTS __________
@@ -595,7 +632,7 @@ async function deleteProduct(id, name){
     }
 }
 
-function updateShopStatus(){
+async function updateShopStatus(){
     const isOpen = shopToggle.checked;
     shopStatusText.textContent = isOpen ? 'Shop Open' : 'Shop Closed';
     shopStatusDot.className = `status-dot ${isOpen ? 'green' : 'red'}`;
@@ -604,6 +641,14 @@ function updateShopStatus(){
     localStorage.setItem('shop_open', isOpen ? '1' : '0');
 
     // To do POST it to backend 
+    const res = await fetch(`${API}/shop/status`, {
+        method: 'PUT',
+        headers: {
+            "Content-Type" : "application/json",
+            Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({isOpen})
+    });
 
     showToast(isOpen ? '✅ Shop is now Open' : '🔴 Shop is now Closed', isOpen ? 'success' : 'error');
 }

@@ -1,3 +1,5 @@
+import { getCart } from "../cart/cartStore.js";
+
 export function renderProducts(items){
     const item_container = document.querySelector(".item")
     
@@ -24,6 +26,10 @@ export function renderProducts(items){
             return;
         }
         
+        let item_in_cart = getCart()[item.id];
+        let quantity = item_in_cart ? item_in_cart.quantity : 0;
+        //console.log("item id = " + item.id + " name is: " + item.name);
+        
         container.innerHTML += `
                     <div class = "item__dish">
                         <img src="./public/images/${item.image_url}" class = "item__dish__image">
@@ -41,15 +47,15 @@ export function renderProducts(items){
                             <div class = "add-to-cart__items">
                                 
                                 <button class = "plus-btn" 
-                                        data-index= "${index}">
+                                        data-index= "${item.id}">
                                     +
                                 </button>
                                 
-                                <span class = "add-to-cart__items__quantity" id="quantity-${index}"> 0 
+                                <span class = "add-to-cart__items__quantity" id="quantity-${item.id}"> ${quantity} 
                                 </span>
                                 
                                 <button class = "minus-btn"
-                                        data-index= "${index}">
+                                        data-index= "${item.id}">
                                     -
                                 </button>
                                 

@@ -8,33 +8,38 @@
         <link rel="icon" type="image/x-icon" href="./public/images/logo.png">
     </head>
     <body>
-        <header class = "header">
-            <div class = "header__head">
-                <div class="header__logo">
-                    <img src = "./public/images/logo.png" alt="Hall 3 Logo">
+        <div class="sticky-container">
+            <header class = "header">
+                <div class = "header__head">
+                    <div class="header__logo">
+                        <img src = "./public/images/logo.png" alt="Hall 3 Logo">
+                    </div>
+                    <div class = "header__brand">
+                    <h1 class = "header__title">Hall 3 Canteen</h1>
+                    <span class = "header__subtitle">By Govind Caters</span>
+                    </div>
                 </div>
-                <div class = "header__brand">
-                <h1 class = "header__title">Hall 3 Canteen</h1>
-                <span class = "header__subtitle">By Govind Caters</span>
+            
+            <button class = "header__status" id = "shop-status-btn" data-open="true" aria-label="Toggle shop status">
+                <span class = "header__status__dot" aria-hidden="true"></span>
+                <span class = "header__status_label" id = "shop-status-label">Open</span>
+            </button>
+            </header>
+            <div class = "search-wrapper">
+                <div class = "search-bar">
+                    <svg class="search-bar__icon" viewBox="0 0 24 24" fill = "none"
+                        stroke = "currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" aria-hidden="true">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                    <input type="search" placeholder="What's Your Mood..." class = "search-bar__text" id = "search">
                 </div>
             </div>
-          
-          <button class = "header__status" id = "shop-status-btn" data-open="true" aria-label="Toggle shop status">
-            <span class = "header__status__dot" aria-hidden="true"></span>
-            <span class = "header__status_label" id = "shop-status-label">Open</span>
-          </button>
-        </header>
+        </div>
         
         <div class = "content">
-            <div class = "search-bar">
-                <svg class="search-bar__icon" viewBox="0 0 24 24" fill = "none"
-                     stroke = "currentColor" stroke-width="2" stroke-linecap="round"
-                     stroke-linejoin="round" aria-hidden="true">
-                     <circle cx="11" cy="11" r="8"/>
-                     <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-                    </svg>
-                <input type="search" placeholder="What's Your Mood..." class = "search-bar__text" id = "search">
-            </div>
+           
             <div class = "item">
                 <!-- <div class = "item__type">
                     <h1 class = "item__type__title">Snacks</h1>
@@ -91,6 +96,7 @@
                         <span class="checkout-total" id="checkout-total-amount">₹0</span>
                     </div>
                     <button class="order-now-btn">Order Now</button>
+                    <button class="clr-cart-btn">Clear Cart</button>
                 </div>
             </div>
         </div>

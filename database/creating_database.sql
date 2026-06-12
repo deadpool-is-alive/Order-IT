@@ -70,3 +70,35 @@ DESCRIBE orders;
 
 ALTER TABLE orders 
 ADD customer_rollnum VARCHAR(15);
+
+ALTER TABLE orders
+MODIFY COLUMN status ENUM(
+    'Pending',
+    'Preparing',
+    'Ready',
+    'Delivered',
+    'Paid',
+    'Credited',
+    'Cancelled'
+) DEFAULT 'Pending';
+
+SET SQL_SAFE_UPDATES = 0;
+UPDATE orders
+SET status = 'Paid'
+WHERE status = 'Delivered';
+SET SQL_SAFE_UPDATES = 1;
+
+ALTER TABLE orders
+MODIFY COLUMN status ENUM(
+    'Pending',
+    'Preparing',
+    'Ready',
+    'Paid',
+    'Credit',
+    'Cancelled'
+) DEFAULT 'Pending';
+
+
+SELECT * FROM orders;
+
+DESCRIBE orders;

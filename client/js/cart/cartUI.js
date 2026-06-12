@@ -1,6 +1,6 @@
 import {addItem, removeItem, getCart} from "./cartStore.js";
 
-function updateCartBadge(){
+export function updateCartBadge(){
     const badge = document.getElementById("cart-badge");
     const totalItems = Object.values(getCart()).reduce((sum,i) => sum + i.quantity, 0);
     if(totalItems > 0){
@@ -13,7 +13,7 @@ function updateCartBadge(){
 
 function handlePlus(products,index){
 
-    const item = products[index];
+    const item = products[index-1];
 
     addItem(item);
 
@@ -29,7 +29,7 @@ function handlePlus(products,index){
 
 function handleMinus(products,index){
 
-    const item = products[index];
+    const item = products[index-1];
 
     removeItem(item);
 
@@ -44,6 +44,8 @@ function handleMinus(products,index){
 }
 
 export function initCartUI(products){
+
+    updateCartBadge();
 
     document.addEventListener("click", (event) => {
         if(event.target.classList.contains("plus-btn")){

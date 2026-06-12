@@ -20,6 +20,8 @@ app.use('/products', require("./routes/products"));
 
 app.use("/orders", require("./routes/orders"));
 
+app.use("/shop", require("./routes/shop"));
+
 const authRoutes = require("./routes/auth");
 
 app.use("/auth", authRoutes);

@@ -1,13 +1,17 @@
-import {getCart, getFinalBill, getPackagingTotal, getTotalBill} from "../cart/cartStore.js";
+import {getCart, clearCart, getFinalBill, getPackagingTotal, getTotalBill} from "../cart/cartStore.js";
+import {updateCartBadge} from "../cart/cartUI.js";
+import { renderProducts } from "../products/renderProducts.js";
+import { getProducts } from "../api/productApi.js";
 import {CONFIG} from "../config.js";
 
 let roomDelivery=0;
 
-function updateCheckoutTotals(){
+function updateCheckoutTotals(roomDelivery){
     document.getElementById("food-total").textContent = `₹${getTotalBill()}`;
     document.getElementById("packaging-total").textContent = roomDelivery ? `₹${getPackagingTotal()}` : "₹0";
     document.getElementById("checkout-total-amount").textContent = `₹${getFinalBill(roomDelivery)}`;
 }
+
 
 function renderCheckout(){
     const container = document.querySelector("#checkout-items");
@@ -45,14 +49,25 @@ function renderCheckout(){
         container.innerHTML += `
             <div class="checkout-item">
                 ${item.name} x ${item.quantity} - ₹${item.quantity * item.price}
+                <div class = "add-to-cart__items"> 
+                </div>
             </div>
             `;
     }
-
-    updateCheckoutTotals();
+    updateCheckoutTotals(roomDelivery);
 }
 
-function openCheckout(overlay){
+async function openCheckout(overlay){
+
+    const response = await fetch(`${CONFIG.API_URL}/shop/status`);
+
+    const data = await response.json();
+
+    if(!data.isOpen){
+        alert("Shop is currently closed");
+        return;
+    }
+
     renderCheckout();
     overlay.classList.add("active");
 }
@@ -104,7 +119,7 @@ function setUpFormValidation(){
         else{
             roomDelivery = 0;
         }
-        updateCheckoutTotals();
+        updateCheckoutTotals(roomDelivery);
 
 
         if(!checkbox.checked){
@@ -192,17 +207,32 @@ async function orderNow(){
             }
         );
 
-        const data = await response.json();
-
-        console.log(data);
-
-        alert(`Order Placed! ID ${data.orderId}`);
+        if(response.ok){
+            const data = await response.json();
+            console.log(data);
+            alert(`Order Placed! ID ${data.orderId}`);
+            
+            updateCheckoutClose();
+        }
     }
     catch(err){
         console.error(err);
 
         alert("Failed to placer order");
     }
+}
+
+async function updateCheckoutClose(){
+    clearCart();
+    closeCheckout(document.querySelector("#checkout-overlay"),document.querySelector(".order-now-form"));
+    updateCartBadge();
+
+    updateCheckoutTotals(roomDelivery);
+
+    const products = await getProducts();
+    renderProducts(products);
+    
+
 }
 
 export function initCheckout(){
@@ -214,11 +244,14 @@ export function initCheckout(){
 
     const orderNowBtn = document.querySelector(".order-now-btn");
 
-    const overlay = document.querySelector("#checkout-overlay")
+    const overlay = document.querySelector("#checkout-overlay");
+
+    const clearCart = document.querySelector(".clr-cart-btn");
 
     orderBtn.addEventListener("click", openCheckout.bind(null,overlay));
     closeBtn.addEventListener("click", closeCheckout.bind(null,overlay,form));
     orderNowBtn.addEventListener("click", orderNow);
+    clearCart.addEventListener("click", updateCheckoutClose);
 }
 
 export function getRoomDelivery(){

@@ -1,6 +1,24 @@
-const cart = {};
+const CART_KEY = "canteen_cart";
 
-let totalBill = 0;
+let cart = JSON.parse(localStorage.getItem(CART_KEY)) || {};
+
+let totalBill = calculateTotalBill();
+
+function saveCart(){
+    localStorage.setItem(CART_KEY, JSON.stringify(cart));
+}
+
+function calculateTotalBill(){
+    let total = 0;
+
+    for(const item of Object.values(cart)){
+        total += item.quantity * Number(item.price);
+    }
+
+    return total;
+}
+
+
 
 export function addItem(item){
     if(!cart[item.id]){
@@ -11,9 +29,10 @@ export function addItem(item){
                 packaging_cost: item.packaging_cost
             };
         }
-
+        console.log("Adding item: " + item.name + " item id = " + item.id);
         cart[item.id].quantity++;
         totalBill += Number(item.price);
+    saveCart();
 }
 
 export function removeItem(item){
@@ -23,11 +42,20 @@ export function removeItem(item){
 
         totalBill -= Number(item.price);
 
+        console.log("Adding item: " + item.namej + " item id = " + item.id);
 
         if(cart[item.id].quantity === 0){
             delete cart[item.id];
         }
+        saveCart();
     }
+}
+
+export function clearCart(){
+    cart = {};
+    totalBill = 0;
+
+    localStorage.removeItem(CART_KEY);
 }
 
 export function getCart(){

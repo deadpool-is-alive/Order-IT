@@ -430,6 +430,8 @@ textarea {resize: vertical;}
 .stat-num.amber { color: var(--amber); }
 .stat-num.green { color: var(--green); }
 .stat-num.muted { color: var(--muted); }
+.stat-num.green-dim {color: var(--green-dim);}
+.stat-num.red {color: var(--red);}
 .stat-label {
     font-size: 12px;
     color: var(--muted);
@@ -514,7 +516,9 @@ textarea {resize: vertical;}
 .pill-pending   { background: rgba(99,102,241,0.15); color: #A5B4FC; border: 1px solid rgba(99,102,241,0.3); }
 .pill-preparing { background: rgba(245,158,11,0.15); color: var(--amber); border: 1px solid rgba(245,158,11,0.3); }
 .pill-ready     { background: rgba(16,185,129,0.15); color: var(--green); border: 1px solid rgba(16,185,129,0.3); }
-.pill-delivered { background: rgba(112,112,160,0.15); color: var(--muted); border: 1px solid rgba(112,112,160,0.25); }
+.pill-paid { background: rgba(112,112,160,0.15); color: var(--muted); border: 1px solid rgba(112,112,160,0.25); }
+.pill-credit { background: rgba(112,112,160,0.15); color: var(--muted); border: 1px solid rgba(112,112,160,0.25); }
+.pill-cancelled { background: rgba(112,112,160,0.15); color: var(--muted); border: 1px solid rgba(112,112,160,0.25); }
 
 .order-customer { font-weight: 600; color: var(--text); }
 .order-phone    { font-size: 13px; color: var(--muted); }
@@ -808,7 +812,9 @@ textarea {resize: vertical;}
 .status-btn:hover { color: var(--text); }
 .status-btn.preparing:hover { background: rgba(245,158,11,0.15); color: var(--amber); border-color: var(--amber); }
 .status-btn.ready:hover { background: rgba(16,185,129,0.15); color: var(--green); border-color: var(--green); }
-.status-btn.delivered:hover { background: rgba(112,112,160,0.15); color: var(--text); }
+.status-btn.paid:hover { background: rgba(112,112,160,0.15); color: var(--text); border-color: var(--blue);}
+.status-btn.credit:hover{ background: rgba(112,112,160,0.15); color: var(--text);}
+.status-btn.cancelled:hover{ background: rgba(112,112,160,0.15); color: var(--text); border-color: var(--red);}
 .status-btn.active-status {
     background: rgba(245,158,11,0.15);
     color: var(--amber);

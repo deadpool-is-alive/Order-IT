@@ -48,3 +48,17 @@ SELECT * FROM orders;
 
 ALTER TABLE orders 
 ADD customer_rollnum VARCHAR(15);
+
+SHOW TABLES;
+
+ALTER TABLE orders
+MODIFY COLUMN status ENUM(
+    'Pending',
+    'Preparing',
+    'Ready',
+    'Paid',
+    'Credit',
+    'Cancelled'
+) DEFAULT 'Pending';
+
+SELECT * FROM orders;

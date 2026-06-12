@@ -128,17 +128,27 @@
                         <span class="stat-label">Ready</span>
                     </div>
                     <div class="stat-card">
-                        <span class="stat-num muted" id="statDelivered">0</span>
-                        <span class="stat-label">Delivered</span>
+                        <span class="stat-num muted" id="statPaid">0</span>
+                        <span class="stat-label">Paid</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num green-dim" id="statCredit">0</span>
+                        <span class="stat-label">Khata</span>
+                    </div>
+                    <div class="stat-card">
+                        <span class="stat-num red" id="statCancelled">0</span>
+                        <span class="stat-label">Cancelled</span>
                     </div>
                 </div>
 
                 <!-- ORDER TABS -->
                 <div class="tab-bar">
                     <button class="tab active" data-tab="new">New</button>
-                    <button class="tab" data-tab="ongoing">Ongoing</button>
+                    <button class="tab" data-tab="preparing">Preparing</button>
                     <button class="tab" data-tab="ready">Ready</button>
-                    <button class="tab" data-tab="Past">Past</button>
+                    <button class="tab" data-tab="paid">Paid</button>
+                    <button class="tab" data-tab="credit">Khata</button>
+                    <button class="tab" data-tab="cancelled">Cancelled</button>
                 </div>
 
                 <div id="ordersContainer" class="orders-grid">
