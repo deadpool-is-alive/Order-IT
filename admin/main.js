@@ -632,8 +632,16 @@ async function deleteProduct(id, name){
     }
 }
 
-async function updateShopStatus(){
-    const isOpen = shopToggle.checked;
+async function updateShopStatus(e){
+    const sourceToggle = e.target;
+    const isOpen = sourceToggle.checked;
+
+    shopToggle.checked = isOpen;
+    if(shopToggleMobile){
+        shopToggleMobile.checked = isOpen;
+    }
+    
+
     shopStatusText.textContent = isOpen ? 'Shop Open' : 'Shop Closed';
     shopStatusDot.className = `status-dot ${isOpen ? 'green' : 'red'}`;
     shopClosedBanner.classList.toggle('hidden', isOpen);
