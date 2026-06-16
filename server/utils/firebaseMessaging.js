@@ -8,7 +8,8 @@ async function sendPushNotification(token, title, body){
             token, 
             data: {
                 title,
-                body
+                body,
+                url: "https://hall-3-canteen-admin.netlify.app"
             }
         };
 

@@ -25,6 +25,14 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim());
 });
 
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+
+  const url = event.notification.data?.url || "/";
+
+  event.waitUntil(clients.openWindow(url));
+})
+
 
 const messaging = firebase.messaging();
 
@@ -35,7 +43,7 @@ messaging.onBackgroundMessage((payload) => {
 
     const notificationTitle = payload.data.title;
 
-    const notificationOptions = { body: payload.data.body};
+    const notificationOptions = { body: payload.data.body, data:{ url: payload.data.url}};
 
     self.registration.showNotification(notificationTitle, notificationOptions);
 });
