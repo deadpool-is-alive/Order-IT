@@ -3,18 +3,26 @@ const express = require("express");
 // const mysql = require("mysql2");
 const db = require("./db/db");
 const cors = require("cors");
+const http = require("http");
+const {Server} = require("socket.io");
+const notificationRoutes = require("./routes/notification");
 
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server, {
+    cors:{
+        origin: "*"
+    }
+});
+
+app.set("io", io);
 
 app.use(cors());
+
 app.use(express.json());
 
-// const db = mysql.createConnection({
-//     host : process.env.DB_HOST,
-//     user : process.env.DB_USER,
-//     password: process.env.DB_PASSWORD,
-//     database: process.env.DB_NAME
-// });
+app.use("/notifications", notificationRoutes);
 
 app.use('/products', require("./routes/products"));
 
@@ -44,6 +52,7 @@ app.get('/products/search',(req,res) => {
 });
 const PORT = process.env.SERVER_PORT || 5000;
 
-app.listen(PORT, () => {
+
+server.listen(PORT, () => {
     console.log(`Server running on ${PORT}`);
 });

@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const verifyToken = require("../middleware/auth");
 const db = require("../db/db");
+const sendPushNotification = require("../utils/firebaseMessaging");
 
 router.post("/",(req,res)=>{
     const {
@@ -133,6 +134,16 @@ router.post("/",(req,res)=>{
                 }
 
                 Promise.all(itemPromises).then(() =>{
+
+                    const io = req.app.get("io");
+
+                    io.emit("new-order", {
+                        orderId,
+                        customer: customer_name, 
+                        rollno: customer_rollnum,
+                        total: total_price
+                    });
+                    
                     res.json({
                         message: "Order Created",
                         orderId
@@ -140,6 +151,49 @@ router.post("/",(req,res)=>{
                 }).catch(err=>{
                     res.status(500).json(err);
                     console.log("Not done");
+                });
+
+                db.query(`SELECT fcm_token FROM admin_devices`, async (err, devices) => {
+                    if(err){
+                        console.error(err);
+                        return;
+                    }
+
+
+                    for(const device of devices){
+                        //console.log("Before pushing notifcation by firebase: ", device);
+                        try{
+                            await sendPushNotification(
+                                device.fcm_token,
+                                "New Order",
+                                `Order #${orderId} received`
+                            );
+
+                        }catch(err){
+
+                            if(
+                                err.code ===
+                                "messaging/registration-token-not-registered"
+                                ||
+                                err.code ===
+                                "messaging/invalid-registration-token"
+                            ){
+
+                                db.query(
+                                    `
+                                    DELETE
+                                    FROM admin_devices
+                                    WHERE fcm_token = ?
+                                    `,
+                                    [device.fcm_token]
+                                );
+
+                                console.log(
+                                    "Removed invalid token"
+                                );
+                            }
+                        }
+                    }
                 });
             }
         );

@@ -1,8 +1,10 @@
 // Admin Dashboard main.js
 
 import {CONFIG} from "./config.js";
+import { messaging, generateFCMToken } from "./firebase.js";
 
 const API = CONFIG.API_URL;
+const socket = io(API);
 
 // ____________STATE______________________
 let token = localStorage.getItem('admin_token') || null;
@@ -64,9 +66,13 @@ function bindEvents(){
     loginPassword.addEventListener('keydown', e => {if(e.key == 'Enter') handleLogin(); });
 
     // Logout
-    logoutBtn.addEventListener('click', () => {
+    logoutBtn.addEventListener('click', async () => {
+
+        await removeFCMToken();
+
         token = null;
         localStorage.removeItem('admin_token');
+        localStorage.removeItem('fcm_token');
         clearInterval(refreshTimer);
         allOrders = [];
         dashboard.classList.add('hidden');
@@ -158,12 +164,66 @@ async function handleLogin(){
         localStorage.setItem('admin_token', token);
         loginError.classList.add('hidden');
         showDashboard();
+        const permission = await enableNotifications();
+
+        const fcmToken = await generateFCMToken();
+        
+        if(fcmToken){
+            //console.log("Saving Token");
+            await saveFCMToken(fcmToken);
+        }
+
+        localStorage.setItem("fcm_token", fcmToken);
+
+        console.log("Generated Token: ", fcmToken);
         console.log('Login Successful');
+        console.log("Permission Result:",permission);
     } catch(err){
         showLoginError('Cannot reach server. Check your connection');
     } finally {
         loginBtn.textContent = 'Sign In';
         loginBtn.disabled = false;
+    }
+}
+
+async function saveFCMToken(fcmToken){
+    try{
+        const res = await fetch(`${API}/notifications/save-token`,{
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body:JSON.stringify({
+                token: fcmToken
+            })
+        });
+
+        const data = await res.json();
+
+        console.log("Token Saved: ", data);
+    } catch(err){
+        console.log(err);
+    }
+}
+
+async function removeFCMToken(){
+    const fcmToken = localStorage.getItem("fcm_token");
+
+    try{
+        
+        await fetch(`${API}/notifications/remove-token`,{
+            method: "DELETE",
+            headers: {
+                "Content-Type":"application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                token: fcmToken
+            })
+        });
+    } catch(err){
+        console.error(err);
     }
 }
 
@@ -178,6 +238,16 @@ function showDashboard(){
     loadOrders();
 
     refreshTimer = setInterval(() => loadOrders(), 30000);
+}
+
+async function enableNotifications(){
+    if(!("Notification" in window)) return "unsupported";
+
+    const permission = await Notification.requestPermission();
+
+    console.log("Notification permission: ", permission);
+
+    return permission;
 }
 
 async function loadOrders(manual = false){
@@ -698,3 +768,22 @@ function handleUnauth(){
     loginScreen.classList.remove('hidden');
     showLoginError('Session expired. Please log in again');
 }
+
+socket.on("new-order", (data) => {
+
+    document.getElementById("orderSound")?.play().catch(() => {});
+
+    showToast(
+        `New Order #${data.orderId}`,
+        "success"
+    );
+
+    if(Notification.permission === "granted"){
+        new Notification("New Order Received", {
+            body: `${data.customer} placed Order #${data.orderId}`,
+            icon: "./public/images/logo.png"
+        });
+    }
+
+    loadOrders();
+});
