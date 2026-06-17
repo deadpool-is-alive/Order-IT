@@ -1,7 +1,9 @@
 // Admin Dashboard main.js
 
 import {CONFIG} from "./config.js";
-import { messaging, generateFCMToken } from "./firebase.js";
+import { messaging, generateFCMToken, storage } from "./firebase.js";
+import {ref, uploadBytes, getDownloadURL}
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
 
 const API = CONFIG.API_URL;
 const socket = io(API);
@@ -615,6 +617,8 @@ function openProductModal(product = null){
     document.getElementById('productDesc').value = product ? (product.description || '') : '';
     document.getElementById('productPrice').value = product ? product.price : '';
     document.getElementById('productCategory').value = product ? (product.category || ''): '';
+    document.getElementById('productPackaging').value = product ? product.packaging_cost : '';
+    document.getElementById('productImageURL').value = product ? product.image_url : '';
     document.getElementById('productFormError').classList.add('hidden');
     productModal.classList.remove('hidden');
     document.getElementById('productName').focus();
@@ -626,10 +630,27 @@ async function saveProduct(){
     const desc = document.getElementById('productDesc').value.trim();
     const price = parseFloat(document.getElementById('productPrice').value);
     const category = document.getElementById('productCategory').value.trim();
+    const packaging_cost = parseFloat(document.getElementById('productPackaging').value);
     const errEl = document.getElementById('productFormError');
 
-    if(!name || isNaN(price) || price < 0){
-        errEl.textContent = 'Name and a valid price are required';
+    const file = document.getElementById("productImage").files[0];
+
+    const imageURL = document.getElementById('productImageURL').value.trim();
+
+    
+
+    // if(file){
+    //     imageURL = await uploadImage(file);
+    // }
+
+    // if(imageURL == ''){
+    //     alert("Select Image");
+    //     return;
+    // }
+    
+
+    if(!name || isNaN(price) || price < 0 || packaging_cost < 0){
+        errEl.textContent = 'Name and a valid price and packaging are required';
         errEl.classList.remove('hidden');
         return;
     }
@@ -637,7 +658,7 @@ async function saveProduct(){
     const existingProduct = id ? allProducts.find(p => String(p.id) === String(id)) : null;
     let available = existingProduct ? existingProduct.available : 1;
 
-    const body = {name, description:desc, price, category, available};
+    const body = {name, description:desc, price, image_url: imageURL, category, available, packaging_cost};
     const url = id ? `${API}/products/${id}` : `${API}/products`;
     const method = id ? 'PUT' : 'POST';
 
@@ -659,6 +680,7 @@ async function saveProduct(){
         if(!res.ok){ errEl.textContent = 'Failed to save. Try again.', errEl.classList.remove('hidden'); return;}
 
         productModal.classList.add('hidden');
+        console.log("body for changes: ", body);
         showToast(id ? 'Product updated' : 'Product added!', 'success');
         loadProducts();
     } catch{
@@ -769,6 +791,30 @@ function handleUnauth(){
     showLoginError('Session expired. Please log in again');
 }
 
+async function uploadImage(file){
+
+    try{
+        
+        const storageRef = ref(storage, `products/${Date.now()}-${file.name}`);
+        
+        console.log("Uploading...");
+
+        const snapshot = await uploadBytes(storageRef, file);
+        
+        console.log("Uploaded", snapshot);
+
+        const url = await getDownloadURL(storageRef);
+
+        console.log("URL: ", url);
+
+        return url;
+    } catch(err){
+        console.error(err);
+
+        throw err;
+    }
+}
+
 socket.on("new-order", (data) => {
 
     document.getElementById("orderSound")?.play().catch(() => {});
@@ -787,3 +833,4 @@ socket.on("new-order", (data) => {
 
     loadOrders();
 });
+

@@ -167,4 +167,10 @@ VALUES
 ('Garlic Naan', 'Naan flavored with garlic and herbs', 20, 'Garlic Naan.webp', 'Roti', TRUE, TRUE, 5),
 ('Lacha Paratha', 'Layered flaky whole wheat paratha', 10, 'Lachha Paratha.jpg', 'Roti', TRUE, TRUE, 5);
 
+
+SET SQL_SAFE_UPDATES = 0;
+UPDATE products
+SET image_url = 'Lemon Soda.jpg'
+WHERE name='Lemon Soda';
+SET SQL_SAFE_UPDATES = 1;
 SELECT * FROM products;

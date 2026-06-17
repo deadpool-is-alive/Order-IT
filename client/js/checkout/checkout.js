@@ -80,19 +80,19 @@ function closeCheckout(overlay,form){
 function showForm(form){
     form.innerHTML = `
         <form id = "customer-form">
-            <label>Full name</label><br>
-            <input type="text" id="fname" required><br>
-            <label>Roll Number</label><br>
-            <input type="text" id="rollNumber" required><br>
-            <label >Phone Number:</label><br>
-            <input type="text" id="phone" maxlength="10" required><br>
+            <label class="form-label">Full name</label>
+            <input type="text" id="fname" required>
+            <label  class="form-label">Roll Number</label>
+            <input type="text" id="rollNumber" required>
+            <label  class="form-label">Phone Number:</label>
+            <input type="text" id="phone" maxlength="10" required>
             <div class="delivery-option">
                 <input type = "checkbox" id="room_delivery">
-                <label for="room_delivery">Deliver to room </label><br>
+                <label for="room_delivery" class="form-label" >Deliver to room </label>
             </div>
-            <label>Room Number</label><br>
+            <label class="form-label" >Room Number</label>
 
-            <input type="text" id="address" disabled><br>
+            <input type="text" id="address" disabled>
 
             <div id="form-error" class="form-erorr">
             </div>

@@ -26,18 +26,20 @@ router.post("/",verifyToken,(req,res) => {
         name,
         description,
         price,
-        category
+        image_url,
+        category,
+        packaging_cost
     } = req.body;
 
     const sql = `
         INSERT INTO products
-        (name, description, price, category)
-        VALUES(?, ?, ?, ?)
+        (name, description, price, category, packaging_cost)
+        VALUES(?, ?, ?, ?, ?)
         `;
 
     db.query(
         sql,
-        [name, description, price, category],
+        [name, description, price, category, packaging_cost],
         (err,result) => {
             if(err){
                 return res.status(500).json(err);
@@ -75,8 +77,10 @@ router.put("/:id", verifyToken, (req,res) =>{
         name,
         description,
         price,
+        image_url,
         category,
-        available
+        available,
+        packaging_cost
     } = req.body;
 
     const sql = `
@@ -86,12 +90,13 @@ router.put("/:id", verifyToken, (req,res) =>{
         description=?,
         price=?,
         category=?,
-        available=?
+        available=?,
+        packaging_cost=?
     WHERE id=?`;
 
     db.query(
         sql,
-        [name, description, price, category, available, id],
+        [name, description, price,  category, available, packaging_cost, id],
         (err,result) =>{
             if(err){
                 return res.status(500).json(err);

@@ -4,6 +4,9 @@ from "https://www.gstatic.com/firebasejs/12.2.1/firebase-app.js";
 import { getMessaging, getToken, onMessage }
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-messaging.js";
 
+import { getStorage, connectStorageEmulator } 
+from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+
 const firebaseConfig = {
   apiKey: "AIzaSyA_he6ELh7Xmhqj96tE2XKbSfS6VEMUOiE",
   authDomain: "order-it-72e77.firebaseapp.com",
@@ -42,7 +45,9 @@ const app = initializeApp(firebaseConfig);
 
 const messaging = getMessaging(app);
 
+const storage = getStorage(app);
 
-export {messaging};
+
+export {messaging, storage};
 
 // console.log("Firebase loaded");

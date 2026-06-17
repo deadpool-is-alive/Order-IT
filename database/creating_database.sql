@@ -99,6 +99,6 @@ MODIFY COLUMN status ENUM(
 ) DEFAULT 'Pending';
 
 
-SELECT * FROM orders;
+SELECT * FROM products;
 
 DESCRIBE orders;

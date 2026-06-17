@@ -612,6 +612,76 @@ body * {
     border-color: var(--clr-terracotta-lt);
 }
 
+.order-now-form{
+    max-width: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    margin: 10px auto;
+    padding: 14px;
+}
+
+#customer-form{
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.form-label{
+    font-family: var(--font-body);
+    font-size: 1rem;
+    
+    color: #4a3e3d;
+    display: block;
+    margin-bottom: 0.25rem;
+}
+
+#customer-form input[type="text"]{
+    width: 100%;
+    padding: 6px 8px;
+
+    font-size: 1.1rem;
+    border: 1px solid #e0d7d5;
+    border-radius: 8px;
+    background-color: #faf9f8;
+    color: #333333;
+    outline: none;
+    transition: --var(transition);
+    box-sizing: border-box;
+}
+#customer-form input[type="text"]:focus {
+    border-color: #8c6239; /* Elegant brown/accent tone */
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(140, 98, 57, 0.15); /* Soft outer glow */
+}
+
+/* Gray out the Room Number field when it is disabled */
+#customer-form input[type="text"]:disabled {
+    background-color: #f1eded;
+    border-color: #e0d7d5;
+    color: #a09593;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+/* Align checkbox and its label perfectly on the same line */
+.delivery-option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 4px 0;
+}
+
+/* Make checkbox slightly larger and easier to click */
+#room_delivery {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    accent-color: #8c6239; /* Colors the checkbox when ticked */
+}
+
+
 #checkout-items{
     flex: 1;
     overflow-y: auto;
@@ -689,6 +759,8 @@ body * {
 .checkout-empty svg{
     opacity: 0.35;
 }
+
+
 
 
 /* Checkout Footer */
@@ -774,24 +846,7 @@ body * {
 }
 
 
-.order-now-form{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    gap: 10px;
-    margin-bottom: 15px;
-}
 
-.order-now-form input{
-    padding: 10px;
-
-    border: 1px solid #ddd;
-    
-    border-radius: 8px;
-
-    font-size: 14px;
-}
 
 .delivery-option{
     display: flex;

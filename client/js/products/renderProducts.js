@@ -6,6 +6,10 @@ export function renderProducts(items){
     item_container.innerHTML = "";
 
     items.forEach((item,index) => {
+        if(Number(item.available) == 0){
+            console.log("Not available: ", item.name);
+            return;
+        }
         let container = document.getElementById(item.category.toLowerCase());
        
         if(container == null){
@@ -22,9 +26,7 @@ export function renderProducts(items){
 
             container = newCategory_items;
         }
-        if(Number(item.is_available) == 0){
-            return;
-        }
+        
         
         let item_in_cart = getCart()[item.id];
         let quantity = item_in_cart ? item_in_cart.quantity : 0;
