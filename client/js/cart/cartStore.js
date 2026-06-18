@@ -75,10 +75,10 @@ export function getPackagingTotal(){
         total += item.quantity * item.packaging_cost;
     }
 
-    return total;
+    return Math.min(total,30);
 }
 
 export function getFinalBill(roomDelivery){
     //console.log("Getting the bill");
-    return getTotalBill() + Math.min((roomDelivery ? getPackagingTotal() : 0),50);
+    return getTotalBill() + Math.min((roomDelivery ? getPackagingTotal() : 0),30);
 }

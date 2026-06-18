@@ -34,7 +34,7 @@ export function renderProducts(items){
         
         container.innerHTML += `
                     <div class = "item__dish">
-                        <img src="./public/images/${item.image_url}" class = "item__dish__image">
+                        <img src="${item.image_url}" class = "item__dish__image" loading="lazy">
                         <h1 class = "item__dish__name">
                             ${item.name} 
                             <img src="./public/images/label${item.is_veg}.png" class = "item__dish__label">

@@ -1,42 +1,4 @@
-@font-face{
-    font-family: 'IrishGrover';
-    src: url('../public/fonts/IrishGrover-Regular.ttf') format('truetype');
-}
-
-@font-face{
-    font-family: 'NunitoSans';
-    src: url('../public/fonts/NunitoSans.ttf') format('truetype');
-}
-
-@font-face{
-    font-family: 'NunitoSans-Italic';
-    src: url('../public/fonts/NunitoSans-Italic.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: 'Domine-Bold';
-    src: url('../public/fonts/Domine-Bold.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: 'Domine-Medium';
-    src: url('../public/fonts/Domine-Medium.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: 'Domine-Regular';
-    src: url('../public/fonts/Domine-Regular.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: 'Domine-SemiBold';
-    src: url('../public/fonts/Domine-SemiBold.ttf') format('truetype')
-}
-
-@font-face {
-    font-family: 'Domine-VariableFont';
-    src: url('../public/fonts/Domine-VariableFont_wght.ttf') format('truetye');
-}
+@import url('https://fonts.googleapis.com/css2?family=Irish+Grover&family=Nunito+Sans:ital,wght@0,200..1000;1,200..1000&family=Domine:wght@400;500;600;700&display=swap');
 
 :root{
     --clr-terracotta:   #C25C3A;
@@ -64,9 +26,10 @@
     --radius-xl:  36px;
     --radius-pill: 999px;
 
-    --font-display: 'Domine-SemiBold', cursive;
-    --font-body:    'Domine-Regular', serif;
-    --font-italic:  'NunitoSans-Italic', sans-serif;
+
+    --font-display: 'Domine', serif;
+    --font-body: 'Domine', serif;
+    --font-italic: 'Nunito Sans', sans-serif;
 
     --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     --transition-slow: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
