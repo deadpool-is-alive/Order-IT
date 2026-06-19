@@ -5,21 +5,22 @@ const db = require("../db/db");
 
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+// const nodemailer = require("nodemailer");
 const crypto = require("crypto");
-
+const {Resend} = require("resend");
+const resend = new Resend(process.env.RESEND_API_KEY);
 
 const otpStore = new Map();
 
-const transporter = nodemailer.createTransport({
-    host: process.env.SMTP_HOST,
-    port: Number(process.env.SMTP_PORT) || 587,
-    secure: false,
-    auth: {
-        user: process.env.SMTP_USER,
-        pass: process.env.SMTP_PASS,
-    },
-});
+// const transporter = nodemailer.createTransport({
+//     host: process.env.SMTP_HOST,
+//     port: Number(process.env.SMTP_PORT) || 587,
+//     secure: false,
+//     auth: {
+//         user: process.env.SMTP_USER,
+//         pass: process.env.SMTP_PASS,
+//     },
+// });
 
 // POST /auth/login
 // Body: {roll_num, password}
@@ -114,18 +115,36 @@ router.post("/signup/verify", (req, res) =>{
             otpStore.set(normalizeRoll, {otp, expiresAt, email: email_address});
 
             try{
-                await transporter.sendMail({
-                    from: `"Hall 3 Canteen"<${process.env.SMTP_USER}>`,
+                // await transporter.sendMail({
+                //     from: `"Hall 3 Canteen"<${process.env.SMTP_USER}>`,
+                //     to: email_address,
+                //     subject: "Your OTP for Hall 3 Canteen Sign-up",
+                //     html: `
+                //         <div style="font-family:sans-serif;max-width:480px;margin:auto;">
+                //             <h2 style="color:#1a1a1a;">Hall 3 Canteen</h2>
+                //             <p>Your one-time verification code is:</p>
+                //             <h1 style="letter-spacing:8px;color:#e07b2a;">${otp}</h1>
+                //             <p style="color:#666;">Valid for <strong>10 minutes</strong>. Do not share this with anyone.</p>
+                //         </div>
+                //     `
+                // });
+
+                // const maskedEmail = email_address.replace(/(.{2})(.*)(@.*)/, (_,a,b,c) => a + "*".repeat(b.length) + c);
+
+                // res.json({
+                //     message: `OTP sent to ${maskedEmail}`,
+                //     masked_email: maskedEmail,
+                // });
+                await resend.emails.send({
+                    from: "Hall 3 Canteen <otp@hall3canteen.in>",
                     to: email_address,
                     subject: "Your OTP for Hall 3 Canteen Sign-up",
-                    html: `
-                        <div style="font-family:sans-serif;max-width:480px;margin:auto;">
+                    html: `<div style="font-family:sans-serif;max-width:480px;margin:auto;">
                             <h2 style="color:#1a1a1a;">Hall 3 Canteen</h2>
                             <p>Your one-time verification code is:</p>
                             <h1 style="letter-spacing:8px;color:#e07b2a;">${otp}</h1>
                             <p style="color:#666;">Valid for <strong>10 minutes</strong>. Do not share this with anyone.</p>
-                        </div>
-                    `
+                        </div>`,
                 });
 
                 const maskedEmail = email_address.replace(/(.{2})(.*)(@.*)/, (_,a,b,c) => a + "*".repeat(b.length) + c);
@@ -134,6 +153,7 @@ router.post("/signup/verify", (req, res) =>{
                     message: `OTP sent to ${maskedEmail}`,
                     masked_email: maskedEmail,
                 });
+            
             } catch (mailErr){
                 console.log("Mail error:", mailErr);
                 res.status(500).json({message: "Failed to send OTP. Try again later."});

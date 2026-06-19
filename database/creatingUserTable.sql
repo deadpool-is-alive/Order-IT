@@ -59,7 +59,7 @@ INSERT INTO iitk_database
 VALUES
 (241179, 'vishvasp24@iitk.ac.in');
 
-SELECT * FROM iitk_database;
+SELECT * FROM users;
 
 SET FOREIGN_KEY_CHECKS = 0;
 TRUNCATE TABLE order_items;
