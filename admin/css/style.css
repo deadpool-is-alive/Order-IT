@@ -1,42 +1,4 @@
-@font-face{
-    font-family: 'IrishGrover';
-    src: url('../public/fonts/IrishGrover-Regular.ttf') format('truetype');
-}
-
-@font-face{
-    font-family: 'NunitoSans';
-    src: url('../public/fonts/NunitoSans.ttf') format('truetype');
-}
-
-@font-face{
-    font-family: 'NunitoSans-Italic';
-    src: url('../public/fonts/NunitoSans-Italic.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: 'Domine-Bold';
-    src: url('../public/fonts/Domine-Bold.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: 'Domine-Medium';
-    src: url('../public/fonts/Domine-Medium.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: 'Domine-Regular';
-    src: url('../public/fonts/Domine-Regular.ttf') format('truetype')
-}
-
-@font-face{
-    font-family: 'Domine-SemiBold';
-    src: url('../public/fonts/Domine-SemiBold.ttf') format('truetype')
-}
-
-@font-face {
-    font-family: 'Domine-VariableFont';
-    src: url('../public/fonts/Domine-VariableFont_wght.ttf') format('truetye');
-}
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Nunito+Sans:ital,wght@0,200..1000;1,200..1000&family=Domine:wght@400;500;600;700&display=swap');
 
 
 *, *::before, *::after {box-sizing: border-box; margin: 0; padding: 0;}
@@ -55,10 +17,10 @@
     --blue:     #6366F1;
     --text:     #F0F0F8;
     --muted:    #7070A0;
-    --font-display:    'Syne', sans-serif;
-    --font-head: 'Domine-SemiBold', cursive;
-    --font-body:    'Domine-Regular', serif;
-    --font-italic:  'NunitoSans-Italic', sans-serif;
+     --font-display: 'Syne', sans-serif;
+    --font-head: 'Domine', serif;
+    --font-body: 'Domine', serif;
+    --font-italic: 'Nunito Sans', sans-serif;
     --radius:   12px;
     --radius-sm:8px;
     --trans:    all 0.2s ease;
@@ -69,6 +31,7 @@ html, body{
     background: var(--bg);
     color: var(--text);
     font-family: var(--font-body);
+    font-weight: 400; /* Domine-Regular */
     font-size: 14px;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -159,6 +122,7 @@ input[type="text"], input[type="password"],input[type="number"], textarea, selec
     color: var(--text);
     padding: 10px 14px;
     font-family: var(--font-body);
+    font-weight: 400; /* Domine-Regular */
     font-size: 14px;
     outline: none;
     transition: var(--trans);
@@ -206,6 +170,7 @@ textarea {resize: vertical;}
     border-radius: var(--radius-sm);
     padding: 9px 16px;
     font-family: var(--font-body);
+    font-weight: 400; /* Domine-Regular */
     font-size: 13px;
     cursor: pointer;
     transition: var(--trans);
@@ -223,6 +188,7 @@ textarea {resize: vertical;}
     border-radius: var(--radius-sm);
     padding: 9px 14px;
     font-family: var(--font-body);
+    font-weight: 400; /* Domine-Regular */
     font-size: 13px;
     cursor: pointer;
     transition: var(--trans);

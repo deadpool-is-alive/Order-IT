@@ -3,6 +3,8 @@ import {updateCartBadge} from "../cart/cartUI.js";
 import { renderProducts } from "../products/renderProducts.js";
 import { getProducts } from "../api/productApi.js";
 import {CONFIG} from "../config.js";
+import { Auth } from "../auth/auth.js";
+import { openAuthModal } from "../auth/authUI.js";
 
 let roomDelivery=0;
 
@@ -33,6 +35,8 @@ function renderCheckout(){
                 <span style="fond-size:0.82rem; color:var(--clr-charcoal-lt);">Add some items to get started </span>
             </div>`;
         document.getElementById("checkout-total-amount").textContent = "₹0";
+        const orderBtn = document.querySelector(".order-now-btn");
+        if(orderBtn) orderBtn.disabled = true;
         return;
     }
 
@@ -68,6 +72,13 @@ async function openCheckout(overlay){
         return;
     }
 
+
+    if(!Auth.isLoggedIn()){
+        alert("Please login to place an order");
+        openAuthModal();
+        return;
+    }
+
     renderCheckout();
     overlay.classList.add("active");
 }
@@ -78,14 +89,22 @@ function closeCheckout(overlay,form){
 }
 
 function showForm(form){
+
+    const user = Auth.user();
+    //console.log(user);
+    const fname = user?.name || "";
+    const roll_num = user?.roll_num || "";
+    const phone_number = user?.phone_number || "";
+
+
     form.innerHTML = `
         <form id = "customer-form">
             <label class="form-label">Full name</label>
-            <input type="text" id="fname" required>
+            <input type="text" id="fname" value="${fname}" disabled>
             <label  class="form-label">Roll Number</label>
-            <input type="text" id="rollNumber" required>
+            <input type="text" id="rollNumber" value="${roll_num}" disabled>
             <label  class="form-label">Phone Number:</label>
-            <input type="text" id="phone" maxlength="10" required>
+            <input type="text" id="phone"value="${phone_number}" maxlength="13" required>
             <div class="delivery-option">
                 <input type = "checkbox" id="room_delivery">
                 <label for="room_delivery" class="form-label" >Deliver to room </label>
@@ -110,6 +129,8 @@ function setUpFormValidation(){
 
     const roomInput = document.getElementById("address");
 
+    const phoneInput = document.getElementById("phone");
+
     checkbox.addEventListener("change", () =>{
         roomInput.disabled = !checkbox.checked;
 
@@ -131,6 +152,7 @@ function setUpFormValidation(){
     document.getElementById("fname").addEventListener("input", validateForm);
     document.getElementById("phone").addEventListener("input", validateForm);
     
+    phoneInput.addEventListener("input", validateForm);
     roomInput.addEventListener("input", validateForm);
 
     validateForm();
@@ -140,9 +162,8 @@ function setUpFormValidation(){
 
 function validateForm(){
 
-    const name = document.getElementById("fname").value.trim();
-
-    const phone = document.getElementById("phone").value.trim();
+    let phone = document.getElementById("phone").value.trim();
+    phone = phone.replace(/\D/g, "");
 
     const room = document.getElementById("address").value.trim();
 
@@ -152,9 +173,8 @@ function validateForm(){
 
     let valid = true;
 
-    if(name.length < 2){
-        valid = false;
-        console.log("Name is too short!");
+    if (phone.length === 12 && phone.startsWith("91")) {
+        phone = phone.slice(2);
     }
 
     if(!/^\d{10}$/.test(phone)){
@@ -201,7 +221,8 @@ async function orderNow(){
             {
                 method:"POST",
                 headers:{
-                    "Content-Type":"application/json"
+                    "Content-Type":"application/json",
+                    Authorization : `Bearer ${Auth.token()}`
                 },
                 body: JSON.stringify(orderData)
             }

@@ -5,9 +5,16 @@ import {initCartUI} from "./cart/cartUI.js";
 import {initCheckout} from "./checkout/checkout.js";
 import {initSearch} from "./search/search.js";
 import {loadShopStatus} from "./shop/shop.js";
+import { injectAuthUI } from "./auth/authUI.js";
+import { initAuthEvents } from "./auth/authEvents.js";
 
 async function init(){
+
     showSkeleton(8);
+
+    injectAuthUI();
+    initAuthEvents();
+
 
     await loadShopStatus();
 

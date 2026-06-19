@@ -4,7 +4,10 @@ const verifyToken = require("../middleware/auth");
 const db = require("../db/db");
 const sendPushNotification = require("../utils/firebaseMessaging");
 
-router.post("/",(req,res)=>{
+router.post("/", verifyToken, (req,res)=>{
+    if(req.user.role !== "user"){
+        return res.json(403).json({ message: "Forbidden"});
+    }
     const {
         customer_name,
         customer_rollnum,
@@ -73,6 +76,7 @@ router.post("/",(req,res)=>{
 
                                 ], (err) => {
                                     if(err){
+                                        console.log("It failed for fetching from order_items");
                                         reject(err);
                                         return;
                                     }
@@ -201,6 +205,9 @@ router.post("/",(req,res)=>{
 });
 
 router.get("/",verifyToken, (req,res) =>{
+    if(req.user.role !== "admin"){
+        return res.json(403).json({ message: "Forbidden"});
+    }
 
     db.query(
         "SELECT * FROM orders ORDER BY  id DESC",
@@ -216,6 +223,9 @@ router.get("/",verifyToken, (req,res) =>{
 });
 
 router.get("/:id/items", verifyToken, (req, res) => {
+    if(req.user.role !== "admin"){
+        return res.json(403).json({ message: "Forbidden"});
+    }
     db.query(
         `
         SELECT oi.*, p.name
@@ -237,7 +247,9 @@ router.get("/:id/items", verifyToken, (req, res) => {
 });
 
 router.put("/:id/status",verifyToken,(req,res) => {
-
+    if(req.user.role !== "admin"){
+        return res.json(403).json({ message: "Forbidden"});
+    }
     const id = req.params.id;
 
     const {status} = req.body;

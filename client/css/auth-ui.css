@@ -1,0 +1,530 @@
+
+:root{
+    --clr-purple:       #6930c3;
+    --clr-purple-lt:    #803bee;
+    --clr-purple-dk:    #580ece; 
+    --clr-purple-dark:  #5b0bb5;
+}
+/* ── User avatar button in header ── */
+.user-avatar-btn {
+    visibility: hidden;
+    position: relative;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.35);
+    background: rgba(255, 255, 255, 0.15);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
+    overflow: hidden;
+}
+
+.user-avatar-btn.is-ready{
+    visibility: visible;
+}
+
+.user-avatar-btn:hover {
+    background: rgba(255, 255, 255, 0.28);
+    border-color: rgba(255, 255, 255, 0.6);
+    transform: scale(1.05);
+}
+
+.user-avatar-btn:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 2px;
+}
+
+/* default icon (person silhouette) */
+.user-avatar-btn__icon {
+    width: 22px;
+    height: 22px;
+    color: #fff;
+    pointer-events: none;
+}
+
+/* initials shown when logged in */
+.user-avatar-btn__initials {
+    font-size: 14px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    pointer-events: none;
+    line-height: 1;
+}
+
+/* logged-in dot indicator */
+.user-avatar-btn__dot {
+    position: absolute;
+    bottom: 1px;
+    right: 1px;
+    width: 9px;
+    height: 9px;
+    background: #4ade80;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    display: none;
+}
+
+.user-avatar-btn.is-logged-in .user-avatar-btn__dot {
+    display: block;
+}
+
+/* ── Auth overlay backdrop ── */
+.auth-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+}
+
+.auth-overlay.is-open {
+    opacity: 1;
+    pointer-events: all;
+}
+
+/* ── Auth card ── */
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+}
+
+.auth-overlay.is-open .auth-card {
+    transform: translateY(0) scale(1);
+}
+
+/* ── Card header with warm saffron gradient (matches canteen brand) ── */
+.auth-card__header {
+    background: linear-gradient(135deg, var(--clr-purple) 0%, var(--clr-purple-dark) 100%);
+    padding: 28px 28px 22px;
+    position: relative;
+}
+
+.auth-card__logo {
+    width: 38px;
+    height: 38px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.2);
+    padding: 4px;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.auth-card__title {
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    margin: 0 0 2px;
+    letter-spacing: -0.3px;
+}
+
+.auth-card__subtitle {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    font-weight: 400;
+}
+
+.auth-card__close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+}
+
+.auth-card__close:hover {
+    background: rgba(255, 255, 255, 0.35);
+}
+
+/* ── Panels ── */
+.auth-panels {
+    position: relative;
+    overflow: hidden;
+}
+
+.auth-panel {
+    padding: 24px 28px 28px;
+    display: none;
+}
+
+.auth-panel.is-active {
+    display: block;
+}
+
+/* ── Tab switcher (Login / Sign up) ── */
+.auth-tabs {
+    display: flex;
+    background: #f3f4f6;
+    border-radius: 10px;
+    padding: 4px;
+    margin-bottom: 22px;
+    gap: 4px;
+}
+
+.auth-tab {
+    flex: 1;
+    padding: 9px 0;
+    font-size: 14px;
+    font-weight: 600;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    color: #6b7280;
+    transition: background 0.18s, color 0.18s;
+}
+
+.auth-tab.is-active {
+    background: #fff;
+    color: #1a1a1a;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+}
+
+/* ── Form fields ── */
+.auth-field {
+    margin-bottom: 16px;
+}
+
+.auth-field__label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #374151;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+}
+
+.auth-field__input {
+    width: 100%;
+    padding: 11px 14px;
+    font-size: 15px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 10px;
+    background: #fafafa;
+    color: #111;
+    outline: none;
+    transition: border-color 0.18s, box-shadow 0.18s;
+    box-sizing: border-box;
+    font-family: inherit;
+}
+
+.auth-field__input:focus {
+    border-color: var(--clrpurple-lt);
+    box-shadow: 0 0 0 3px rgba(224, 123, 42, 0.15);
+    background: #fff;
+}
+
+.auth-field__input::placeholder {
+    color: #9ca3af;
+}
+
+.auth-field__input.is-error {
+    border-color: #ef4444;
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
+}
+
+/* ── Error / info message ── */
+.auth-message {
+    font-size: 13px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    display: none;
+}
+
+.auth-message.is-error {
+    display: block;
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+}
+
+.auth-message.is-success {
+    display: block;
+    background: #f0fdf4;
+    color: #16a34a;
+    border: 1px solid #bbf7d0;
+}
+
+.auth-message.is-info {
+    display: block;
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #bfdbfe;
+}
+
+/* ── Primary action button ── */
+.auth-btn {
+    width: 100%;
+    padding: 13px;
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(135deg, var(--clr-purple) 0%, var(--clr-purple-dark) 100%);
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    letter-spacing: 0.2px;
+    transition: opacity 0.18s, transform 0.15s;
+    margin-top: 4px;
+    font-family: inherit;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.auth-btn:hover:not(:disabled) {
+    opacity: 0.92;
+    transform: translateY(-1px);
+}
+
+.auth-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.auth-btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+}
+
+/* spinner inside button */
+.auth-btn__spinner {
+    width: 16px;
+    height: 16px;
+    border: 2.5px solid rgba(255,255,255,0.4);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: auth-spin 0.65s linear infinite;
+    display: none;
+}
+
+.auth-btn.is-loading .auth-btn__spinner {
+    display: block;
+}
+
+.auth-btn.is-loading .auth-btn__text {
+    opacity: 0.7;
+}
+
+@keyframes auth-spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ── OTP input row ── */
+.auth-otp-row {
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    margin-bottom: 16px;
+}
+
+.auth-otp-row .auth-field {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.auth-otp-resend {
+    background: none;
+    border: 1.5px solid var(--clr-purple);
+    border-radius: 10px;
+    color: var(--clr-purple);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 11px 14px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+    font-family: inherit;
+    height: 44px;
+    align-self: flex-end;
+}
+
+.auth-otp-resend:hover:not(:disabled) {
+    background: #fff4ec;
+}
+
+.auth-otp-resend:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+/* ── Back link ── */
+.auth-back-link {
+    background: none;
+    border: none;
+    color: #6b7280;
+    font-size: 13px;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-bottom: 18px;
+    transition: color 0.15s;
+    font-family: inherit;
+}
+
+.auth-back-link:hover {
+    color: #111;
+}
+
+/* ── Logged-in user dropdown panel ── */
+.auth-user-panel {
+    padding: 20px 28px 24px;
+    display: none;
+}
+
+.auth-user-panel.is-active {
+    display: block;
+}
+
+.auth-user-greeting {
+    font-size: 17px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin: 0 0 2px;
+}
+
+.auth-user-roll {
+    font-size: 13px;
+    color: #6b7280;
+    margin: 0 0 4px;
+    font-family: monospace;
+    letter-spacing: 0.5px;
+}
+
+.auth-user-email {
+    font-size: 13px;
+    color: #9ca3af;
+    margin: 0 0 20px;
+}
+
+.auth-user-divider {
+    height: 1px;
+    background: #f3f4f6;
+    margin-bottom: 16px;
+}
+
+.auth-logout-btn {
+    width: 100%;
+    padding: 11px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #dc2626;
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: inherit;
+}
+
+.auth-logout-btn:hover {
+    background: #fee2e2;
+}
+
+/* ── Step indicator ── */
+.auth-steps {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 20px;
+}
+
+.auth-step {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #e5e7eb;
+    transition: background 0.2s, width 0.2s;
+}
+
+.auth-step.is-done {
+    background: #4ade80;
+}
+
+.auth-step.is-active {
+    background: var(--clr-purple-lt);
+    width: 22px;
+    border-radius: 4px;
+}
+
+/* ── Password toggle ── */
+.auth-field__pw-wrapper {
+    position: relative;
+}
+
+.auth-field__pw-wrapper .auth-field__input {
+    padding-right: 44px;
+}
+
+.auth-field__pw-toggle {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9ca3af;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    transition: color 0.15s;
+}
+
+.auth-field__pw-toggle:hover {
+    color: #4b5563;
+}
+
+/* ── Mobile ── */
+@media (max-width: 480px) {
+    .auth-card {
+        border-radius: 16px;
+    }
+
+    .auth-card__header,
+    .auth-panel,
+    .auth-user-panel {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+
+    .auth-card__title {
+        font-size: 19px;
+    }
+}

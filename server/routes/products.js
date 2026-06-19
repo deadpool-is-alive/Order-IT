@@ -22,6 +22,10 @@ router.get('/', (req, res) => {
 
 router.post("/",verifyToken,(req,res) => {
 
+    if(req.user.role !== "admin"){
+        return res.json(403).json({ message: "Forbidden"});
+    }
+
     const {
         name,
         description,
@@ -52,6 +56,10 @@ router.post("/",verifyToken,(req,res) => {
 });
 
 router.delete("/:id", verifyToken, (req,res) => {
+    if(req.user.role !== "admin"){
+        return res.json(403).json({ message: "Forbidden"});
+    }
+
     const id = req.params.id;
 
     db.query(
@@ -70,7 +78,10 @@ router.delete("/:id", verifyToken, (req,res) => {
 });
 
 router.put("/:id", verifyToken, (req,res) =>{
-
+    if(req.user.role !== "admin"){
+        return res.json(403).json({ message: "Forbidden"});
+    }
+    
     const id = req.params.id;
 
     const{
