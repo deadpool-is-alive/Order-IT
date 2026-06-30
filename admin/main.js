@@ -4,6 +4,8 @@ import {CONFIG} from "./config.js";
 import { messaging, generateFCMToken, storage } from "./firebase.js";
 import {ref, uploadBytes, getDownloadURL}
 from "https://www.gstatic.com/firebasejs/12.2.1/firebase-storage.js";
+import { initShopToggle } from "./shop.js";
+import { initBroadcast } from "./broadcast.js";
 
 const API = CONFIG.API_URL;
 const socket = io(API);
@@ -34,6 +36,7 @@ const logoutBtnMobile = document.getElementById('logoutBtnMobile');
 const refreshBtn = document.getElementById('refreshBtn');
 const ordersView = document.getElementById('ordersView');
 const productsView = document.getElementById('productsView');
+const annoucementView = document.getElementById('annoucementView');
 const ordersContainer = document.getElementById('ordersContainer');
 const productsContainer = document.getElementById('productsContainer');
 const orderModal = document.getElementById('orderModal');
@@ -57,7 +60,11 @@ const toast = document.getElementById('toast');
 
 // ______INIT___________________
 window.addEventListener('DOMContentLoaded', () => {
-    if(token) showDashboard();
+    if(token){ 
+        showDashboard();
+        initShopToggle(socket);
+        initBroadcast(socket);
+    }
     bindEvents();
 })
 
@@ -88,6 +95,7 @@ function bindEvents(){
             const view = btn.dataset.view;
             ordersView.classList.toggle('hidden', view !== 'orders');
             productsView.classList.toggle('hidden', view !== 'products');
+            annoucementView.classList.toggle('hidden', view !== 'annoucements')
             if(view === 'products') loadProducts();
         });
     });
@@ -99,6 +107,7 @@ function bindEvents(){
             const view = btn.dataset.view;
             ordersView.classList.toggle('hidden', view !== 'orders');
             productsView.classList.toggle('hidden', view !== 'products');
+            annoucementView.classList.toggle('hidden', view !== 'annoucements');
             if(view === 'products') loadProducts();
         })
     })

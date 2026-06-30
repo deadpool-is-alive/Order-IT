@@ -11,7 +11,9 @@ export function initSearch(){
         timer = setTimeout( async () => {
             const query = e.target.value;
             const filtered = await searchProducts(query);
-
+            
+            // console.log("Search items are these");
+            // console.log(filtered);
             renderProducts(filtered);
         }, 300);
     });

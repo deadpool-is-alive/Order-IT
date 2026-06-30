@@ -1,10 +1,11 @@
 import {getCart, clearCart, getFinalBill, getPackagingTotal, getTotalBill} from "../cart/cartStore.js";
-import {updateCartBadge} from "../cart/cartUI.js";
+import {updateCartBadge, registerCheckoutUpdater, setRoomDelivery} from "../cart/cartUI.js";
 import { renderProducts } from "../products/renderProducts.js";
 import { getProducts } from "../api/productApi.js";
 import {CONFIG} from "../config.js";
 import { Auth } from "../auth/auth.js";
-import { openAuthModal } from "../auth/authUI.js";
+import { openAuthModal, refreshAvatarState } from "../auth/authUI.js";
+import { isShopOpen } from "../shop/shop.js";
 
 let roomDelivery=0;
 
@@ -47,14 +48,43 @@ function renderCheckout(){
     showForm(form);
     setUpFormValidation();
 
+    // const upiUrl = `upi://pay?pa=paytm.s24y6q1@pty&pn=Paytm&am=${getFinalBill(roomDelivery)}&cu=INR`
+
+    // const qrcode = new QRCode(document.getElementById("upiQR"), {
+    //     text: upiUrl,
+    //     width: 220,
+    //     height: 220,
+    //     colorDark : "#000000",
+    //     colorLight : "#ffffff",
+    //     correctLevel : QRCode.CorrectLevel.L
+    // });
+
+    // console.log("Making qr ");
 
     for(const [id,item] of Object.entries(cart)){
 
         container.innerHTML += `
-            <div class="checkout-item">
-                ${item.name} x ${item.quantity} - ₹${item.quantity * item.price}
-                <div class = "add-to-cart__items"> 
+            <div class="checkout-item" id="checkout-item-${id}">
+                <div class="checkout-item-info">
+                    <span class="checkout-item__name"> ${item.name} - </span>
+                    <span class="checkout-item__price"> ₹${item.price} </span>
                 </div>
+                
+                <div class="checkout-controls">
+                    <button class="checkout-minus-btn" data-id=${id}> - </button>
+                    <span class = "checkout-item__qty" id = "checkout-qty-${id}"> ${item.quantity} </span>
+                    <button class="checkout-plus-btn" data-id=${id}> + </button>
+                </div>
+                <button class="checkout-remove-btn" data-id="${id}" title="Remove item" aria-label="Remove item">
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" 
+                        stroke="currentColor" stroke-width="2.5" 
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                        <path d="M10 11v6M14 11v6"/>
+                        <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+                    </svg>
+                </button>
             </div>
             `;
     }
@@ -63,15 +93,10 @@ function renderCheckout(){
 
 async function openCheckout(overlay){
 
-    const response = await fetch(`${CONFIG.API_URL}/shop/status`);
-
-    const data = await response.json();
-
-    if(!data.isOpen){
+    if(!isShopOpen()){
         alert("Shop is currently closed");
         return;
     }
-
 
     if(!Auth.isLoggedIn()){
         alert("Please login to place an order");
@@ -86,6 +111,8 @@ async function openCheckout(overlay){
 function closeCheckout(overlay,form){
     hideForm(form);
     overlay.classList.remove("active");
+    document.getElementById("upiQR").innerHTML = ``;
+    renderProducts(products);
 }
 
 function showForm(form){
@@ -140,6 +167,8 @@ function setUpFormValidation(){
         else{
             roomDelivery = 0;
         }
+
+        setRoomDelivery(roomDelivery);
         updateCheckoutTotals(roomDelivery);
 
 
@@ -193,6 +222,13 @@ function validateForm(){
 }
 
 async function orderNow(){
+
+    if(!isShopOpen()){
+        closeCheckout(document.querySelector("#checkout-overlay"),document.querySelector(".order-now-form"));
+        alert("Shop is currently closed");
+        return;
+    }
+
     if(!validateForm()){
         return;
     }
@@ -201,6 +237,7 @@ async function orderNow(){
         return;
     }
     console.log(getCart());
+
 
     const orderData = {
         customer_name: document.getElementById("fname").value,
@@ -228,6 +265,15 @@ async function orderNow(){
             }
         );
 
+        if(response.status === 401) {
+            closeCheckout(document.querySelector("#checkout-overlay"),document.querySelector(".order-now-form"));
+            Auth.clear(); 
+            refreshAvatarState();
+            alert("Your session is expired! Please login again!"); 
+            openAuthModal();
+            return;
+        }
+
         if(response.ok){
             const data = await response.json();
             console.log(data);
@@ -245,6 +291,10 @@ async function orderNow(){
 
 async function updateCheckoutClose(){
     clearCart();
+    roomDelivery = 0;
+
+    setRoomDelivery(0);
+    
     closeCheckout(document.querySelector("#checkout-overlay"),document.querySelector(".order-now-form"));
     updateCartBadge();
 
@@ -256,7 +306,14 @@ async function updateCheckoutClose(){
 
 }
 
-export function initCheckout(){
+
+let products = [];
+
+export function initCheckout(allProducts){
+
+    products = allProducts;
+
+    registerCheckoutUpdater(renderCheckout);
 
     const orderBtn = document.querySelector(".order_btn");
     const closeBtn = document.querySelector(".checkout-close");
@@ -267,12 +324,12 @@ export function initCheckout(){
 
     const overlay = document.querySelector("#checkout-overlay");
 
-    const clearCart = document.querySelector(".clr-cart-btn");
+    const clearCartBtn = document.querySelector(".clr-cart-btn");
 
     orderBtn.addEventListener("click", openCheckout.bind(null,overlay));
     closeBtn.addEventListener("click", closeCheckout.bind(null,overlay,form));
     orderNowBtn.addEventListener("click", orderNow);
-    clearCart.addEventListener("click", updateCheckoutClose);
+    clearCartBtn.addEventListener("click", updateCheckoutClose);
 }
 
 export function getRoomDelivery(){

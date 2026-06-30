@@ -32,6 +32,8 @@ export function addItem(item){
         console.log("Adding item: " + item.name + " item id = " + item.id);
         cart[item.id].quantity++;
         totalBill += Number(item.price);
+    // console.log("Now the cart looks like");
+    // console.log(cart);
     saveCart();
 }
 
@@ -42,7 +44,7 @@ export function removeItem(item){
 
         totalBill -= Number(item.price);
 
-        console.log("Adding item: " + item.namej + " item id = " + item.id);
+        // console.log("Removing item: " + item.namej + " item id = " + item.id);
 
         if(cart[item.id].quantity === 0){
             delete cart[item.id];
@@ -54,7 +56,7 @@ export function removeItem(item){
 export function clearCart(){
     cart = {};
     totalBill = 0;
-
+    document.getElementById("upiQR").innerHTML = ``;
     localStorage.removeItem(CART_KEY);
 }
 
@@ -79,6 +81,7 @@ export function getPackagingTotal(){
 }
 
 export function getFinalBill(roomDelivery){
-    //console.log("Getting the bill");
+    //console.log("Getting the bill")
+
     return getTotalBill() + Math.min((roomDelivery ? getPackagingTotal() : 0),30);
 }

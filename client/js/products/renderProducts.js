@@ -32,9 +32,11 @@ export function renderProducts(items){
         let quantity = item_in_cart ? item_in_cart.quantity : 0;
         //console.log("item id = " + item.id + " name is: " + item.name);
         
+        let imageUrl = item.image_url ? item.image_url : "../public/images/defaultFood.webp";
+
         container.innerHTML += `
                     <div class = "item__dish">
-                        <img src="${item.image_url}" class = "item__dish__image" loading="lazy">
+                        <img src="${imageUrl}" class = "item__dish__image" loading="lazy">
                         <h1 class = "item__dish__name">
                             ${item.name} 
                             <img src="./public/images/label${item.is_veg}.png" class = "item__dish__label">

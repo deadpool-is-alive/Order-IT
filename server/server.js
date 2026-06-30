@@ -9,6 +9,7 @@ const notificationRoutes = require("./routes/notification");
 
 const app = express();
 const server = http.createServer(app);
+const verifyToken = require("./middleware/auth");
 
 const io = new Server(server, {
     cors:{
@@ -17,6 +18,14 @@ const io = new Server(server, {
 });
 
 app.set("io", io);
+
+io.on("connection", (socket) => {
+    socket.on("shop:status", (data) =>{
+        io.emit("shop:status", {isOpen: data.isOpen});
+    });
+
+    console.log("Client connected:", socket.id);
+})
 
 app.use(cors());
 
@@ -50,6 +59,26 @@ app.get('/products/search',(req,res) => {
         }
     );
 });
+
+app.post("/announcements/broadcast", verifyToken, (req, res) => {
+    if(req.user.role !== "admin"){
+        return res.json(403).json({ message: "Forbidden"});
+    }
+    const {message, title, expiryMinutes = 60} = req.body;
+
+
+    const announcement ={
+        id: Date.now().toString(),
+        title: title || "Notice",
+        message,
+        expiresAt: Date.now() + (expiryMinutes * 60 * 1000)
+    };
+
+    io.emit("annoucement", announcement);
+
+    res.json({success: true, id: announcement.id});
+})
+
 const PORT = process.env.SERVER_PORT || 5000;
 
 

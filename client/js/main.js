@@ -7,6 +7,8 @@ import {initSearch} from "./search/search.js";
 import {loadShopStatus} from "./shop/shop.js";
 import { injectAuthUI } from "./auth/authUI.js";
 import { initAuthEvents } from "./auth/authEvents.js";
+import { CONFIG } from "./config.js";
+import { initAnnoucements } from "./annoucement/annoucement.js";
 
 async function init(){
 
@@ -15,9 +17,12 @@ async function init(){
     injectAuthUI();
     initAuthEvents();
 
+    const socket = io(CONFIG.API_URL);
 
-    await loadShopStatus();
+    await loadShopStatus(socket);
+    initAnnoucements(socket);
 
+    
     const products = await getProducts();
 
     renderProducts(products);
@@ -26,7 +31,7 @@ async function init(){
 
     initCartUI(products);
 
-    initCheckout();
+    initCheckout(products);
 
     initSearch();
 }

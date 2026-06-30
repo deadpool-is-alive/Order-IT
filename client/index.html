@@ -4,8 +4,9 @@
         <meta name = "viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
         <link rel="stylesheet" href="css/style.css">
-        <script type="module" src = "./js/main.js"></script>
+        
         <link rel="icon" type="image/x-icon" href="./public/images/logo.png">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
     </head>
     <body>
         <div class="sticky-container">
@@ -74,15 +75,47 @@
 
 
         <div class = "checkout-overlay" id = "checkout-overlay" role="dialog" aria-modal="true" aria-label="Your order">
+            
+            <aside class="checkout-side-panel">
+                
+                <div class="checkout-side-header">
+                    <h2>Hall 3 Canteen</h2>
+                    <p>Fresh • Fast • Affordable</p>
+                </div>
+
+                <div class="checkout-qr">
+                    <!-- <img src="public/images/qr.jpeg" alt="Payment QR"> -->
+                    <div id="upiQR"></div>
+                </div>
+
+                <div class ="checkout-features">
+                    <div class="feature">
+                        ✓ UPI Payments
+                    </div>
+
+                    <!-- <div class="feature">
+                        ⏱ Average wait: 10 mins
+                    </div> -->
+                </div>
+
+                <div class="checkout-footer-note">
+
+                    Freshly prepared after your order is confirmed.
+
+                </div>
+            </aside>
+
             <div class="checkout-container">
                 <div class = "checkout-header">
                     <h2>Your Order</h2>
                     <button class="checkout-close" aria-label="Close cart">✕</button>
                 </div>
+                <div class="checkout-content">
+                    <div class = "order-now-form"></div>
 
-                <div class = "order-now-form"></div>
-
-                <div id = "checkout-items"> </div>
+                    <div id = "checkout-items"> </div>
+                </div>
+                
 
                 <div class = "checkout-footer">
                     <div class = "checkout-total-row">
@@ -107,11 +140,16 @@
         
 
         <footer class = "footer">
-            <span class = "footer__brand">Hall 3 Canteen</span>
-            <div class="footer__divider" aria-hidden="true"></div>
-            <p class="made_with">By Govind Caterers</p>
-            <span class = "contact">Shivansh: <a href="tel:+911234567890" class="phone-link">+91 1234567890</a></span>
+            <div class ="footer-info">
+                <span class = "footer__brand">Hall 3 Canteen</span>
+                <div class="footer__divider" aria-hidden="true"></div>
+                <p class="made_with">By Govind Caterers</p>
+                <span class = "contact">Shivansh: <a href="tel:+917839251185" class="phone-link">+91 7839251185</a></span>
+                <span class = "contact">Arun: <a href="tel:+916386856095" class="phone-link">+91 6386856095</a></span>
+            </div>
+            <div class = "footer-version"> <span class="version">Version: 1.1.0 </span></div>
         </footer>
-        
+        <script src="https://cdn.socket.io/4.8.1/socket.io.min.js"></script>
+        <script type="module" src = "./js/main.js"></script>
     </body>
 </html>

@@ -32,4 +32,8 @@ async function apiPost(path, body){
     return data;
 }
 
+function handleUAuth(){
+    Auth.clear();
+}
+
 export {Auth , apiPost};

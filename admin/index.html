@@ -73,6 +73,10 @@
                     Orders
                     <span class="nav-badge" id="newOrdersBadge">0</span>
                 </button>
+                <button class="nav-item" data-view="annoucements">
+                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M3 11v2"/> <path d="M7 10v4"/> <path d="M7 10l10-4v12l-10-4"/> <path d="M7 14l1.5 5h2L9 13"/> <path d="M19 8a4 4 0 0 1 0 8"/> </svg>
+                    Annoucements
+                </button>
                 <button class="nav-item" data-view="products">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 10V7"/></svg>
                     Products
@@ -105,6 +109,7 @@
                 <svg viewBox="0 0 24 24" file="none" storke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
                 Shop is currently <strong>CLOSED</strong> - customers see a closed message
             </div>
+            
 
             <!-- ____ORDERS VIEW ____-->
             <section id="ordersView" class="view">
@@ -164,6 +169,27 @@
                     </div>
                 </div>
             </section>
+            <section id="annoucementView" class="view hidden">
+                <div class="broadcast-panel">
+                    <h3>Broadcast to Customers</h3>
+                    <input type="text" id="broadcastTitle" placeholder="Title  e.g. Today's Special" />
+                    <textarea id="broadcastMessage" rows="3" 
+                            placeholder="e.g. Fresh samosas are ready! First come first served."></textarea>
+                    <div class = "broadcast-expiry">
+                        <label>Expires after</label>
+                        <select id="broadcastExpiry">
+                            <option value="1">1 minute</option>
+                            <option value="5">5 minute</option>
+                            <option value="30">30 minutes</option>
+                            <option value="60" selected>1 hour</option>
+                            <option value="120">2 hours</option>
+                            <option value="360">6 hours</option>
+                            <option value="1440">24 hours</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" id="broadcastBtn">Send to All Customers</button>
+                </div>
+            </section>
 
             <!--_________PRODUCTS VIEW__________-->
             <section id="productsView" class="view hidden">
@@ -194,6 +220,10 @@
           </svg>
           Orders
           <span class="bottom-nav-badge" id="bottomNavBadge">0</span>
+        </button>
+        <button class="bottom-nav-item" data-view="annoucements">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"> <path d="M3 11v2"/> <path d="M7 10v4"/> <path d="M7 10l10-4v12l-10-4"/> <path d="M7 14l1.5 5h2L9 13"/> <path d="M19 8a4 4 0 0 1 0 8"/> </svg>
+            Annoucements
         </button>
         <button class="bottom-nav-item" data-view="products">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"

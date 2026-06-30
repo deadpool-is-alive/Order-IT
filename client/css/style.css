@@ -20,6 +20,9 @@
     --clr-purple-dark:  #5b0bb5;
     --clr-red :         #DB222A;
 
+    --clr-danger:    #A32D2D;
+    --clr-danger-dk: #791F1F;
+
     --radius-sm:  8px;
     --radius-md:  16px;
     --radius-lg:  24px;
@@ -313,6 +316,75 @@ body * {
 }
 
 
+/* ============================================
+    Annoucements
+    =========================================
+ */
+
+/* Non-intrusive announcement banner */
+.announcement-banner {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background-color: #ffe1fe;
+    border: 1px solid #cf0bf5;
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    margin: 1rem;
+    animation: slideUp 0.3s ease;
+}
+
+.announcement-banner__icon {
+    font-size: 1.2rem;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.announcement-banner__body {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    flex: 1;
+}
+
+.announcement-banner__title {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #92400e;
+}
+
+.announcement-banner__message {
+    font-size: 0.85rem;
+    color: #78350f;
+    line-height: 1.4;
+}
+
+.announcement-banner__close {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #92400e;
+    padding: 2px;
+    flex-shrink: 0;
+    opacity: 0.7;
+    transition: opacity 0.15s;
+}
+
+.announcement-banner__close:hover { opacity: 1; }
+
+.announcement-banner--hiding {
+    animation: slideDown 0.3s ease forwards;
+}
+
+@keyframes slideUp {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideDown {
+    from { opacity: 1; transform: translateY(0); }
+    to   { opacity: 0; transform: translateY(10px); }
+}
 
 .item{
     width: min(96vw, 1000px);
@@ -554,12 +626,163 @@ body * {
     position: fixed;
     inset: 0;
     background: rgba(138, 22, 248, 0.873);
-    display: none;
-    justify-content: flex-end;
-    align-items: stretch;
-    z-index: 1000;
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
+
+    display: none;
+    justify-content: flex-end;
+    gap: 40px;
+    align-items: center;
+    padding: 32px 0 32px 32px;
+    
+    z-index: 1000;
+    
+}
+
+.checkout-side-panel{
+
+    width:min(420px,32vw);
+
+    height:80vh;
+
+    max-height:700px;
+
+    background:rgba(255,255,255,.12);
+
+    backdrop-filter:blur(20px);
+
+    -webkit-backdrop-filter:blur(20px);
+
+    border:1px solid rgba(255,255,255,.18);
+
+    border-radius:28px;
+
+    box-shadow:
+        0 20px 60px rgba(0,0,0,.25);
+
+    overflow:hidden;
+
+    display:flex;
+
+    flex-direction:column;
+
+    animation:slide-in-left .35s;
+}
+
+.checkout-side-header{
+
+    padding:28px;
+
+    background:
+        linear-gradient(
+            135deg,
+            rgba(255,255,255,.18),
+            rgba(255,255,255,.05)
+        );
+
+    text-align:center;
+}
+
+.checkout-side-header h2{
+
+    color:white;
+
+    font-size:2rem;
+
+    margin-bottom:6px;
+
+    font-family:var(--font-display);
+}
+
+.checkout-side-header p{
+
+    color:rgba(255,255,255,.8);
+
+}
+
+.checkout-qr{
+
+    margin:28px;
+
+    padding:22px;
+
+    border-radius:24px;
+
+    background:white;
+
+    display:flex;
+
+    justify-content:center;
+}
+
+.checkout-qr img{
+
+    width:220px;
+
+}
+
+.checkout-features{
+
+    padding:0 28px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:16px;
+}
+
+.feature{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:14px;
+
+    padding:16px;
+
+    border-radius:18px;
+
+    background:rgba(255,255,255,.15);
+
+    color:white;
+
+    backdrop-filter:blur(12px);
+
+}
+
+.checkout-footer-note{
+
+    margin-top:auto;
+
+    padding:28px;
+
+    color:rgba(255,255,255,.9);
+
+    font-style:italic;
+
+    text-align:center;
+}
+
+@keyframes slide-in-left{
+
+from{
+
+opacity:0;
+
+transform:translateX(-60px);
+
+}
+
+to{
+
+opacity:1;
+
+transform:translateX(0);
+
+}
+
 }
 
 .checkout-overlay.active {
@@ -579,6 +802,10 @@ body * {
     display: flex;
     flex-direction: column;
     box-shadow: -8px 0 32px rgba(44, 42, 39, 0.2);
+
+    border-radius: 28px 0 0 28px;
+    overflow: hidden;
+
     animation: slide-in-right 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -627,13 +854,17 @@ body * {
 }
 
 .order-now-form{
-    max-width: 400px;
+    /* max-width: 400px; */
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    margin: 10px auto;
-    padding: 14px;
+    /* margin: 10px auto;
+    padding: 14px; */
+
+    margin:0;
+    padding:0;
+    max-width:none;
 }
 
 #customer-form{
@@ -695,11 +926,89 @@ body * {
     accent-color: #8c6239; /* Colors the checkbox when ticked */
 }
 
-
-#checkout-items{
+.checkout-content{
     flex: 1;
     overflow-y: auto;
+
+    display: flex;
+    flex-direction: column;
+    
     padding: 1rem 1.5rem;
+
+    gap: 1rem;
+}
+
+.checkout-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkout-minus-btn,
+.checkout-plus-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--clr-terracotta);
+    color: var(--clr-white);
+    font-size: 1.1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition), transform var(--transition);
+    flex-shrink: 0;
+}
+
+.checkout-minus-btn:hover,
+.checkout-plus-btn:hover {
+    background-color: var(--clr-terracotta-dk);
+}
+
+.checkout-minus-btn:active,
+.checkout-plus-btn:active {
+    transform: scale(0.9);
+}
+
+/* Quantity display — matches .add-to-cart__items__quantity */
+.checkout-item__qty {
+    font-size: 0.95rem;
+    font-weight: 700;
+    min-width: 20px;
+    text-align: center;
+    color: var(--clr-charcoal);
+}
+
+/* Remove button — danger red so it's visually distinct from +/− */
+.checkout-remove-btn {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: none;
+    background-color: var(--clr-danger);   
+    color: var(--clr-white);
+    font-size: 0.7rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color var(--transition), transform var(--transition);
+    flex-shrink: 0;
+    margin-left: 4px;   /* small gap to separate it from the qty controls */
+}
+
+.checkout-remove-btn:hover  { background-color: var(--clr-danger-dk); }
+.checkout-remove-btn:active { transform: scale(0.9); }
+
+#checkout-items{
+    /* flex: 1;
+    overflow-y: auto; */
+    overflow:visible;
+    padding:0;
+    /* padding: 1rem 1.5rem; */
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
@@ -924,15 +1233,35 @@ body * {
 
 .footer {
     background-color: var(--clr-charcoal);
-    padding: 1.2rem 2rem;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.35rem;
     border-top: 3px solid var(--clr-purple);
+    padding: 1.2rem 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+
+    gap: 0.35rem;
+    position: relative;
     margin-top: auto;
     flex-shrink: 0;
 }
+.footer-info{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+}
+
+.footer-version{
+    position: absolute;
+    right: 2rem;
+    bottom: 1.2rem;
+    color: var(--clr-charcoal-lt);
+    font-size: 0.85rem;
+}
+
 
 .footer__brand {
     font-family: var(--font-display);
@@ -940,6 +1269,7 @@ body * {
     color: var(--clr-cream);
     letter-spacing: 0.03rem;
 }
+
 
 .made_with {
     font-size: 0.78rem;
@@ -1113,6 +1443,26 @@ body * {
 
     .checkout-container {
         width: 100vw;
+
+        max-width: none;
+        
+        height: 100dvh;
+
+        border-radius: 0;
+    }
+
+    .checkout-overlay{
+        padding: 0;
+
+        gap: 0;
+
+        justify-content: flex-end;
+
+        align-items: stretch;
+    }
+
+    .checkout-side-panel{
+        display: none;
     }
 
     .checkout-header{
@@ -1146,7 +1496,25 @@ body * {
     }
 
     .footer {
-        padding: 1rem 1rem;
+        position: static;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+        gap: 0.8rem;
+        padding: 1.5rem 1rem;
+    }
+    
+    .footer-version{
+        position: static;
+        margin-top: 0.5rem;
+    }
+
+    .footer-info{
+        align-items: center;
+    }
+
+    .contact{
+        display: block;
     }
 }
 
@@ -1171,6 +1539,30 @@ body * {
         width: 32px;
         height: 32px;
         font-size: 1.1rem;
+    }
+
+    .checkout-container {
+        width: 100vw;
+
+        max-width: none;
+        
+        height: 100dvh;
+
+        border-radius: 0;
+    }
+
+    .checkout-overlay{
+        padding: 0;
+
+        gap: 0;
+
+        justify-content: flex-end;
+
+        align-items: stretch;
+    }
+
+    .checkout-side-panel{
+        display: none;
     }
 }
 

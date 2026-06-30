@@ -13,7 +13,7 @@ export async function getProducts(){
 
 export async function searchProducts(query){
     const response = await fetch(
-         `${CONFIG.API_URL}/products/search?q=${query}`
+         `${CONFIG.API_URL}/products/search?q=${query}` 
     );
 
     //console.log("Getting response");
